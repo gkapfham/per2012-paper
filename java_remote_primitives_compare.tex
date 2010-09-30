@@ -18,14 +18,19 @@
 
 %%\title{Evaluating Java-Based Remote Communication Primitives}
 
-\title{Can Java Primitives Support Intra-node Communication?}
+% Note: the new title reflects a better understanding of the 
+% word primitive -- it could be a data type of a communication tool
+
+\title{An Empirical Comparison of Java Remote Communication Primitives
+  for Internode Communication}
+
 %%\title{Evaluating Java Primitives Internode Communication}
 %%\title{Can Java Primitives Support Communication \\in a Multi-Server
 %%Operating System?}
 
 \numberofauthors{1}
 \author{
-\alignauthor Philip F. Burdette, William Jones, \\
+\alignauthor Philip F. Burdette, William F. Jones, \\
  Brian C. Blose, Gregory M. Kapfhammer \\
        \affaddr{Allegheny College}\\
        \affaddr{Department of Computer Science} \\ 
@@ -55,25 +60,27 @@
 %% (XML-RPC) communication primitives when distinct address spaces
 %% exchange messages while executing on the same computational node.
 
-The Java programming language offers a wide variety of remote
-communication primitives that vary according to their performance and
-functionality.  This paper presents a suite of benchmarks that measure
-the performance associated with using sockets and eXtensible Markup
-Language remote procedure calls (XML-RPC) to exchange messages between
-distinct address spaces that execute on the same computational node.
-Furthermore, the paper reports on an empirical study comparing sockets
-and XML-RPC with response time measurements from profilers that use
-either operating system tools or Java language instrumentation.  The
-benchmark suite also calculates network resource consumption by
-employing packet filters within the GNU/\-Linux kernel.  Moreover, we
-evaluate the response time results in light of memory subsystem
-metrics that characterize the behavior of the Java virtual machine
-(JVM).  Our findings indicate that sockets perform better when small
-to very large objects are transmitted, whereas XML-RPC exhibits lower
-response time than sockets with extremely large bulk data transfers.
-Overall, the experiments reveal fundamental trade-offs in performance
-and thus represent the first step towards determining whether or not
-Java primitives can support efficient intra-node communication.
+%% The Java programming language offers a wide variety of remote
+%% communication primitives that vary according to their performance and
+%% functionality.  
+
+This paper presents a benchmark suite that measures the performance of
+using sockets and eXtensible Markup Language remote procedure calls
+(XML-RPC) to exchange intra-node messages between Java virtual
+machines (JVMs).  The paper also reports on an empirical study
+comparing sockets and XML-RPC with response time measurements from
+profilers that use both operating system tools and Java language
+instrumentation.  By employing packet filters within the GNU/\-Linux
+kernel, the benchmark suite also calculates network resource
+consumption.  Moreover, the framework interprets the response time
+results in light of memory subsystem metrics characterizing the
+behavior of the JVM.  The empirical findings indicate that sockets
+perform better when small to very large objects are transmitted,
+whereas XML-RPC exhibits lower response time than sockets with
+extremely large bulk data transfers.  The experiments reveal
+trade-offs in performance and thus represent the first step towards
+determining if Java remote communication primitives can support the
+efficient exchange of intra-node messages.
 
 %% that
 %% is prevalent in modern systems.
