@@ -329,33 +329,32 @@ contributions of this paper include: \vspace*{-.1in}
 %% exist as alternatives to socket-based
 %% and XML-RPC communication.  
 
-The Java programming language provides a wide variety of remote
-communication primitives that could support the intra-node
-communication shown in Figure~\ref{fig:intranode-communication}.  A
-local-remote system could also use communication primitives such as
-the Java-Message Passing Interface (Java-MPI)
-\cite{getov-mpi,judd-mpi-java}, Java remote method invocation (RMI)
-\cite{grosso-rmi,maasen-java-rmi}, tuple spaces
-\cite{arnold-javaspace-rdb,wells-linda-java-journal}, or JXTA (i.e.,
-``Juxtapose'') \cite{oaks-jxta,seigneur-jxta}.  Yet, this paper
+The Java programming language provides a wide variety of RCPs that
+could support the intra-node message exchange shown in
+Figure~\ref{fig:intranode-communication}.  A local-remote system could
+also use communication primitives such as the Java-Message Passing
+Interface (Java-MPI) \cite{getov-mpi,judd-mpi-java}, Java remote
+method invocation (RMI) \cite{grosso-rmi,maasen-java-rmi}, tuple
+spaces \cite{arnold-javaspace-rdb,wells-linda-java-journal}, or JXTA
+(i.e., ``Juxtapose'') \cite{oaks-jxta,seigneur-jxta}.  Yet, this paper
 focuses on the performance evaluation of sockets and XML-RPC because
 these primitives respectively represent (i) a low-level and a
 high-level remote communication mechanism and (ii) a well established
 standard and a recently proposed popular alternative.\footnote{{\small
     Since the benchmarking framework supports the integration of other
     RCPs, Section~\ref{sec:future-work} notes that we intend to
-    incorporate and evaluate other primitives in future work.}} While
-sockets typically support high performance message passing, they may
-require a programmer to understand several low-level implementation
-details.  Alternatively, XML-RPC furnishes a high-level communication
-paradigm that supports programming language independence and the rapid
-implementation of a program while potentially compromising performance
-\cite{allman-per}.  Even though the {\tt java.net} package provides a
-refined implementation of sockets, XML can still be directly
-integrated into the Java programming language \cite{harren-xj}.
-Furthermore, XML-RPC libraries are available for Java and systems such
-as OpenDHT use this protocol to support client communication
-\cite{rhea-opendht}.
+    incorporate and evaluate other communication primitives in future
+    work.}} While sockets typically support high performance message
+passing \cite{allman-per}, they may require a programmer to understand
+several low-level implementation details.  Alternatively, XML-RPC
+furnishes a high-level communication paradigm that enables programming
+language independence and the rapid implementation of a program while
+potentially compromising performance \cite{allman-per}.  Even though
+the {\tt java.net} package provides a refined implementation of
+sockets, XML can still be directly integrated into the Java
+programming language \cite{harren-xj}.  Furthermore, XML-RPC libraries
+are available for Java and systems such as OpenDHT use this protocol
+to facilitate client communication \cite{rhea-opendht}.
 
 The {\tt java.net.Socket} class provides an endpoint for communication
 between two JVMs.  The {\tt bind} operation attaches a socket to a
@@ -403,10 +402,22 @@ due to the prevalence of this configuration.
 \subsection{Benchmark Suites}
 \label{sec:benchmarking-suites}
 
-% NOTE: this paragraph needs to be changes so that the reader can tell
-% that we are now focusing on nano and micro benchmarks.  I picked to
-% use ``nano'' instead of ``kernel'' since we use kernel to have
-% another meaning in the paper!
+% NOTE: this paragraph was changed so that the reader can tell that we
+% are now focusing on nano and micro benchmarks.  I picked to use
+% ``nano'' instead of ``kernel'' since we use kernel to have another
+% meaning in the paper!
+
+%% micro- (µ-)
+
+%% 10-6
+
+%% 1 millionth
+
+%% nano- (n-)
+
+%% 10-9
+
+%% 1 billionth
 
 \begin{sloppypar}
 Zhang and Seltzer observe that there are three main purposes for
@@ -414,32 +425,40 @@ benchmarking: (i) comparing the performance of different systems, (ii)
 guiding performance optimizations, and (iii) predicting an
 application's performance in new software and hardware environments
 \cite{zhang-hbenchjava}.  Furthermore, Zhang and Seltzer place
-software performance benchmarks into one of four categories: (i) micro
-benchmarks, (ii) macro benchmarks, (iii) combined benchmarks, and (iv)
-application-specific benchmarks \cite{zhang-hbenchjava}.  In the
-context of intra-node communication, this paper describes micro and
-macro benchmarks that measure the performance of communication
-primitives for the Java programming language.  Our micro benchmarks
-focus on the analysis of certain primitive operations that are
-commonly used in local-remote applications \cite{zhang-hbenchjava}.
-Macro benchmarks incorporate operations that might be used in real
-local-remote programs and thus they often require additional
-server-side computations.
+software performance benchmarks into one of four categories: (i)
+micro, (ii) macro, (iii) combined, and (iv) application-specific
+benchmarks \cite{zhang-hbenchjava}.  In the context of intra-node
+communication, this paper describes nano and micro benchmarks that
+measure the performance of remote communication primitives for Java.
+Our nano benchmarks focus on the analysis of several basic operations
+that are commonly used in local-remote applications (e.g.,
+transmission of a single value or a list of data
+values).\footnote{{\small Since the metric prefix ``nano'' ($10^{-9}$)
+    denotes a number that is smaller than the one described by the
+    ``micro'' ($10^{-6}$) prefix, we use the term {\em nano benchmark}
+    to refer to a benchmark that is smaller than its macro
+    counterpart.  We selected this descriptor instead of the
+    previously used term {\em kernel benchmark} \cite{agarwal-sp2}
+    since ``kernel'' now commonly refers to a part of an operating
+    system. }}  The micro benchmarks incorporate small and
+well-defined operations (e.g., finding a data value in a list or
+reversing the provided list) that require server-side computations and
+thus may be found in real-world local-remote systems.
 \end{sloppypar}
 
-According to Horgan et al. \cite{horgan-measure-runtime}, the analysis
-of Java programs can be broken into at least four categories, namely
-(i) statically, at the source code level; (ii) statically, at the
-bytecode level; (iii) dynamically, at the bytecode level; and (iv)
-dynamically, on a specific virtual machine and architecture.  This
-paper focuses on the fourth category by analyzing the performance of
-Java-based communication primitives on a specific JVM, computer
-architecture, and operating system kernel. The performance
-measurements that result from benchmark execution are also explained
-in light of Java virtual machine behavior profiles.  Leveraging the
-insights developed in \cite{heydon-java-core}, this paper examines how
-excessive heap allocation and the frequent execution of the garbage
-collector can impact the performance of intra-node communication.
+According to Horgan et al. \cite{horgan-measure-runtime}, the
+performance evaluation of Java programs can take place at four
+different levels, namely (i) statically, with the source code; (ii)
+statically, with the bytecode; (iii) dynamically, with the bytecode;
+and (iv) dynamically, on a specific virtual machine and architecture.
+This paper focuses on the fourth category by analyzing the performance
+of Java-based RCPs on a specific JVM, computer architecture, and
+operating system kernel. The performance measurements that result from
+benchmark execution are also explained in light of JVM behavior
+profiles.  Building on the insights developed by Heydon and Najork
+\cite{heydon-java-core}, this paper also examines how excessive heap
+allocation and the frequent execution of the garbage collector can
+impact the performance of intra-node communication.
 
 %% A micro benchmark for JavaSpaces could measure the performance of
 %% basic space operations like {\tt read}, {\tt write}, and {\tt take}.
