@@ -9,6 +9,7 @@
 \usepackage{url}
 
 \usepackage{epsf}
+\usepackage{upgreek}
 
 \usepackage[named]{algo}
 
@@ -480,38 +481,81 @@ impact the performance of intra-node communication.
 %%  and a communication parameter $V$.
 
 Figure~\ref{fig:experiment-campaign} describes the {\em
-  ExperimentCampaign} that executes $L$ trials of benchmark $B$ when
+  ExperimentCampaign} that executes $N$ trials of benchmark $B$ when
 it is configured to use communication primitive $P$. Line~\ref{init}
 of Figure~\ref{fig:experiment-campaign} respectively initializes the
-sequences (i.e., ordered bags) of response times ($R$), network
-resource consumptions ($W$), and JVM behavior profiles ($J$) so that
-they can be populated with measurements during the execution of the
-experiments.  The socket or XML-RPC server starts on line~\ref{start}
-and then the framework pauses so that the server can enter a quiescent
-state and the packet capture tool can initialize.  Lines~5
-through~\ref{pause2} ensure that (i) benchmark $B$ executes for $L$
-trials, (ii) the response time and JVM profiles are properly stored
-for later analysis, and (iii) the server pauses in preparation for the
-next benchmark trial.  In an attempt to minimize the startup time of
-the framework, the server and the packet capture tool run continuously
-for the duration of the $L$ trials (exploratory experiments indicated
-that the performance results were not sensitive to this optimization).
-{\em ExperimentCampaign} terminates when line~\ref{return} returns the
+sequences (i.e., ordered tuples) of response times ($\mathcal{R}$),
+network resource consumptions ($\mathcal{W}$), and JVM behavior
+profiles ($\mathcal{J}$) so that they can be populated with
+measurements during the execution of the experiments.  The socket or
+XML-RPC server starts on line~\ref{start} and then the framework
+pauses so that the server can enter a quiescent state and the packet
+capture tool can initialize.  Lines~5 through~\ref{pause2} ensure that
+(i) benchmark $B$ executes for $N$ trials, (ii) the response time and
+JVM profiles are properly stored for later analysis, and (iii) the
+server pauses in preparation for the next benchmark trial.  These
+lines use the order preserving union operator, denoted $\uplus$, to
+add data values to $\mathcal{R}$ and $\mathcal{J}$.  In an attempt to
+minimize the startup time of the framework, the server and the packet
+capture tool run continuously for the duration of the $N$ trials
+(exploratory experiments indicated that all of the empirical results
+were not sensitive to this optimization).  Finally, {\em
+  ExperimentCampaign} terminates when line~\ref{return} returns the
 evaluation metrics.
 
-Table~\ref{tab:baselines} lists the four micro benchmarks that are
-similar to those described by Allman \cite{allman-per}. The micro
-benchmarks perform minimal computation on the side of the server in
-order to provide a baseline for the response time measurements.  The
-\texttt{SS} benchmark uses a client that sends and receives a single
-primitive, which is either an integer or a string.  The client for
-\texttt{SV} sends a single primitive and receives a vector of objects.
-The \texttt{VS} benchmark has a client that sends a vector of objects
-and receives a single primitive.  Finally, the \texttt{VV} benchmark
-causes the client to send and receive a vector of objects.  During
-{\em ExperimentCampaign} the size of the vector of objects, denoted
-$size(V)$, is fixed throughout every execution trial of {\tt SV}, {\tt
-  VS}, and {\tt VV}.
+\begin{figure}
+
+%% \centering
+%% \epsfig{file=phases.eps}
+%% \caption{Experiment Campaign Design}\label{fig:expdes}
+
+ \begin{center}
+      \begin{algorithm}{ExperimentCampaign}[B, P, N]
+        { \qinput{Benchmark $B$; \newline 
+	    \hspace*{.16in} Communication Primitive $P$; \newline
+            %\hspace*{.16in} Communication Vector $V$; \newline
+            \hspace*{.16in} Number of Experiment Trials $N$;}
+	  \qoutput{Response Time Sequence $\mathcal{R}$; \newline
+            \hspace*{.26in} Network Consumption Sequence $\mathcal{W}$; \newline
+	    \hspace*{.26in} JVM Profile Sequence $\mathcal{J}$}
+        } 
+    $\mathcal{R} \qlet \emptyset; \; \mathcal{W} \qlet \emptyset; \; \mathcal{J} \qlet \emptyset$; \label{init}\\	
+    \mbox{{\em StartServer}}$(B,P)$ \label{start}\\
+    \mbox{{\em Pause()}} \label{pause1} \\
+    \mbox{{\em StartPacketCapture}}$(B,P)$ \label{packstart} \\
+    \qfor $i \in \{1, \ldots, N\}$ \label{for} \\
+    \qdo $\{R(B,P), J(B,P)\}$ \qlet \mbox{{\em Execute}}$(B,P)$ \label{exec} \\
+    $\mathcal{R} \qlet \mathcal{R} \uplus \langle R(B,P) \rangle$ \label{storeR} \\
+    $\mathcal{J} \qlet \mathcal{J} \uplus \langle J(B,P) \rangle$ \label{storeJ} \\
+    \mbox{{\em Pause()}} \label{pause2} \qrof \\
+    \mbox{{\em StopServer}}$(B,P)$ \label{stop} \\  
+    $W(B,P)$ \qlet \mbox{{\em StopPacketCapture}}$(B,P)$ \label{packstop} \\
+    $\mathcal{W} \qlet \langle W(B,P) \rangle$ \label{storeW} \\
+    \qreturn $\mathcal{R},\mathcal{W},\mathcal{J}$ \label{return}
+  \end{algorithm}
+  \end{center}
+\vspace*{-.15in}
+\caption{The {\em ExperimentCampaign} Algorithm.}
+
+\label{fig:experiment-campaign}
+\vspace*{-.2in}
+\end{figure}
+
+% NOTE: This has been changed to refer to nano benchmarks!
+
+Table~\ref{tab:baselines} lists the four nano benchmarks that are
+similar to those that are described by Allman \cite{allman-per}. These
+nano benchmarks perform minimal computation on the side of the server
+in order to provide a baseline for the response time measurements.
+The \texttt{SS} benchmark uses a client that sends and receives a
+single data value, which is either an integer or a string.  The client
+for \texttt{SV} sends a single data value and receives a vector of
+values.  The \texttt{VS} benchmark has a client that sends a vector of
+values and receives a single value.  Finally, the \texttt{VV}
+benchmark causes the client to send and receive a vector of data
+values.  During {\em ExperimentCampaign} the size of the vector of
+values, denoted $size(V)$, is fixed throughout every execution trial
+of {\tt SV}, {\tt VS}, and {\tt VV}.
 
 % NOTE: Argh!  This means that this has to be a parameter to the algorithm
 % But, that seems forced and I have removed it again (Brian, help)
@@ -532,66 +576,69 @@ $size(V)$, is fixed throughout every execution trial of {\tt SV}, {\tt
 %% return the value that was stored vector index that contains the
 %% client's integer and thus it is of
 
-This paper proposes the four macro benchmarks listed in
-Table~\ref{tab:realworlds}.  After \texttt{FIND}'s server randomly
+This paper also uses the four micro benchmarks listed in
+Table~\ref{tab:realworlds}.  After \texttt{GRAB}'s server randomly
 generates a vector of integers, the client transmits a single integer
 to the server.  This benchmark is of type {\tt SS} since we configured
-the {\tt FIND} server to use the client's integer as an index into its
+the {\tt GRAB} server to use the client's integer as an index into its
 vector and subsequently return the resulting integer.  {\tt FACT} is
 an {\tt SV} benchmark because it sends an integer value to a server
-that enumerates all of the factors for the integer and returns a
-vector of integers.  The type {\tt VS} benchmark called {\tt GCD}
-sends a vector of integers to a server that calculates the greatest
-common divisor and returns this integer to the client.  The final
-benchmark is \texttt{REV}, which sends a vector of integers to the
-server.  This benchmark is of type {\tt VV} because the server
-reverses the order of the elements within the vector and returns this
-new vector back to the client.
-
-\begin{figure}
-
-%% \centering
-%% \epsfig{file=phases.eps}
-%% \caption{Experiment Campaign Design}\label{fig:expdes}
-
- \begin{center}
-      \begin{algorithm}{ExperimentCampaign}[B, P, L]
-        { \qinput{Benchmark $B$; \newline 
-	    \hspace*{.16in} Communication Primitive $P$; \newline
-            %\hspace*{.16in} Communication Vector $V$; \newline
-            \hspace*{.16in} Number of Experiment Trials $L$;}
-	  \qoutput{Response Time Sequence $R$; \newline
-            \hspace*{.26in} Network Consumption Sequence $W$; \newline
-	    \hspace*{.26in} JVM Profile Sequence $J$}
-        } 
-    $R \qlet \emptyset; \; W \qlet \emptyset; \; J \qlet \emptyset$; \label{init}\\	
-    \mbox{{\em StartServer}}$(B,P)$ \label{start}\\
-    \mbox{{\em Pause()}} \label{pause1} \\
-    \mbox{{\em StartPacketCapture}}$(B,P)$ \label{packstart} \\
-    \qfor $l \in [1, L]$ \label{for} \\
-    \qdo $\{R(B,P), J(B,P)\}$ \qlet \mbox{{\em Execute}}$(B,P)$ \label{exec} \\
-    $R \qlet R \uplus \langle R(B,P) \rangle$ \label{storeR} \\
-    $J \qlet J \uplus \langle J(B,P) \rangle$ \label{storeJ} \\
-    \mbox{{\em Pause()}} \label{pause2} \qrof \\
-    \mbox{{\em StopServer}}$(B,P)$ \label{stop} \\  
-    $W(B,P)$ \qlet \mbox{{\em StopPacketCapture}}$(B,P)$ \label{packstop} \\
-    $W \qlet \langle W(B,P) \rangle$ \label{storeW} \\
-    \qreturn $R,W,J$ \label{return}
-  \end{algorithm}
-  \end{center}
-\vspace*{-.15in}
-\caption{The {\em ExperimentCampaign} Algorithm.}
-
-\label{fig:experiment-campaign}
-\vspace*{-.1in}
-\end{figure}
-
+that enumerates all the factors of the integer and returns a vector of
+integers.  The type {\tt VS} benchmark called {\tt GCD} sends a vector
+of integers to a server that calculates the greatest common divisor
+and returns this integer to the client.  The final benchmark is
+\texttt{REV}, which sends a vector of integers to the server.  This
+benchmark is of type {\tt VV} because the server reverses the order of
+the elements within the vector and returns this new vector back to the
+client.
 
 \section{Experiment Goals and Design}
 \label{sec:exper-goals-design}
 
 \subsection{Evaluation Metrics}
 \label{sec:evmet}
+
+\begin{table}[t]
+
+  \begin{center}
+  \begin{tabular}{| c | c | c |}
+  \hline
+  Experiment & Sent by client & Received by client \\
+  \hline
+  \texttt{SS} & Single value & Single value \\
+  \texttt{SV} & Single value & Vector \\
+  \texttt{VS} & Vector & Single value \\
+  \texttt{VV} & Vector & Vector \\
+  \hline
+  \end{tabular}
+\end{center}
+
+  \vspace*{-.1in}
+  \caption{Nano Benchmarks.}\label{tab:baselines}
+  %\vspace*{.05in}
+
+\end{table}
+
+\begin{table}[t]
+
+  \begin{center}
+  \begin{tabular}{| c | c | c |}
+  \hline
+  Experiment & Sent by client & Received by client \\
+  \hline
+  \texttt{GRAB} ({\tt SS}) & Single value & Single value \\
+  \texttt{FACT} ({\tt SV}) & Single primitive & Vector \\
+  \texttt{GCD}  ({\tt VS}) & Vector & Single value \\
+  \texttt{REV}  ({\tt VV}) & Vector & Vector \\
+  \hline
+  \end{tabular}
+\end{center}
+
+  \vspace*{-.1in}
+  \caption{Micro Benchmarks.}\label{tab:realworlds}
+  \vspace*{-.2in}
+
+\end{table}
 
 % content modified by gmk
 
@@ -601,17 +648,27 @@ new vector back to the client.
 %% notation established by Fiedler et al. \cite{fiedler-per}.
 
 The primary goal of the experiments is to measure the time overhead
-and network consumption associated with socket-based and XML-RPC
+and network consumption associated with socket and XML-RPC
 communication.  Equation~(\ref{eq:time}) defines $R(B,P)$, the
-response time associated with the execution of benchmark $B$ with
-remote communication primitive $P$.  For example, $R(\mbox{{\tt GCD}},
-X)$ denotes the response time for the execution of the {\tt GCD}
-benchmark with the XML-RPC primitive.  Equation~(\ref{eq:time_change})
-describes $R_\Delta (B,P,P')$, the change in response time when we
-replace communication primitive $P$ with primitive $P'$.  Finally,
+response time associated with the execution of a benchmark $B$ from
+either Table~\ref{tab:baselines} or \ref{tab:realworlds} and a remote
+communication primitive $P$ that is either sockets ($S$) or XML-RPC
+($X$).  For instance, $R(\mbox{{\tt GCD}}, X)$ denotes the response
+time for the execution of the {\tt GCD} benchmark with the XML-RPC
+primitive.  Equation~(\ref{eq:time_change}) describes $R_\Delta
+(B,P,P')$, the change in response time when we replace communication
+primitive $P$ with primitive $P'$.  Next,
 Equation~(\ref{eq:time_percent_incr}) defines {\small
-  $R_\Delta^\%(B,P,P')$}, the percent change in response time when
-benchmark $B$ uses $P'$ instead of $P$.
+  $R_\Delta^\%(B,P,P')$}, the percent change in response time when the
+benchmark $B$ uses $P'$ instead of $P$.  For example, {\small
+  $R_\Delta^\%(\mbox{{\tt FACT}},S,X)$} stands for the percent change
+in response time when {\tt FACT} uses XML-RPC rather than sockets.
+Since it is often useful to calculate how response time changes when
+$P'$ replaces $P$ for a set of benchmarks designated $\upbeta$ (e.g.,
+all of the micro benchmarks in Table~\ref{tab:realworlds}),
+Equation~(\ref{eq:time_percent_incr_set}) characterizes {\small
+  $R_\Delta^\%(\upbeta,P,P')$}, the average percent change in response
+time over all of the benchmarks $B \in \upbeta$.
 
 \vspace*{-.1in}
 
@@ -631,19 +688,43 @@ R_\Delta (B,P,P') = R(B,P') - R(B,P)
 R_\Delta^\%(B,P,P')  = \frac{R_\Delta (B,P,P')}{R(B,P)} \times 100
 \end{equation}
 
+\vspace*{-.1in}
+
+\begin{equation} \label{eq:time_percent_incr_set}
+R_\Delta^\%(\upbeta,P,P')  = \frac{\displaystyle \sum_{B\in\upbeta} R_\Delta^\% (B,P,P')}
+                          {|\upbeta|} 
+\end{equation}
+
 \begin{sloppypar}
-Unless specified otherwise, this paper views the change and percent
-change in response time when the socket communication primitive is
-replaced with XML-RPC.  For all of the benchmarks described in
-Section~\ref{sec:benchmark-framework}, the results analysis in
-Section~\ref{sec:results} always reports $R_\Delta(B,S,X)$ and {\small
-  $R_\Delta^\%(B,S,X)$}.  A positive value for {\small
+The benchmarking framework measures response time with timers that
+operate at two distinct levels of granularity.  We leverage the
+operating system tool \texttt{/usr/bin/time} to record the coarse
+granularity time overheads.  These operating system-based response
+times include the time required to start the client, communicate with
+the server, and shutdown the client.  The benchmarks use Java language
+instrumentation within the client source code to measure the fine
+granularity response times.  The instrumentation records $\mbox{{\em
+    T}}_{start}(B,P)$ before calling the server and then saves
+$\mbox{{\em T}}_{complete}(B,P)$ after the server finishes the
+computation.
+\end{sloppypar}
+
+\begin{sloppypar}
+Unless specified otherwise, this paper always views the change and
+percent change in response time when the socket communication
+primitive is replaced with XML-RPC.  For each of the benchmarks
+described in Section~\ref{sec:benchmark-framework}, the results
+analysis in Section~\ref{sec:results} always reports $R_\Delta(B,S,X)$
+and {\small $R_\Delta^\%(B,S,X)$}.  A positive value for {\small
   $R_\Delta^\%(B,P,P')$} indicates an increase in $R(B,P)$ and a
 negative value shows that response time decreased when benchmark $B$
-uses primitive $P'$ instead of $P$.  The change and percent change of
-the network consumption metric, $W(B,P)$, can be defined in a fashion
-analogous to Equations~(\ref{eq:time_change})
-and~(\ref{eq:time_percent_incr}).
+uses primitive $P'$ instead of $P$.  The framework also use the {\tt
+  jvmstat} and {\tt hprof} tools to generate the JVM behavior profiles
+in $\mathcal{J}$.  Finally, the benchmarking framework employs
+Roubtsov's object sizing technique \cite{roubtsov-sizing} to calculate
+the size of the method parameters and return values and, for each
+benchmark $B$ and primitive $P$, it appends these values to the
+appropriate entity in $\mathcal{J}$.
 \end{sloppypar}
 
 %% The first are from an operating system-based timer,
@@ -659,47 +740,36 @@ and~(\ref{eq:time_percent_incr}).
 %% Space overhead is collected for every ten executions of the client, or
 %% for every execution of the server.
 
-\begin{table}[t]
+\begin{sloppypar}
+Even though our focus is on intra-node communication, the use of HTTP
+and TCP/IP requires the client and server to transfer messages across
+the network interface.  Therefore, we configured the \texttt{tcpdump}
+tool to receive and attempt to record all of the packets that are
+transmitted across the network interface and we use the {\tt capinfos}
+tool to analyze the captured packets.  The data reported by {\tt
+  tcpdump} and {\tt capinfos} includes the (i) total number of packets
+received by the kernel filter, (ii) number of packets captured and
+stored for later analysis, and (iii) average packet size.  Due to the
+high rate of data transfer, the number of captured packets can be much
+lower than the number of packets that were received by the {\tt
+  tcpdump} filter.  Since \texttt{capinfos} can only analyze the
+captured packets, it is not always possible to accurately measure the
+total amount of network resources that the benchmark consumed during
+execution.  Section~\ref{sec:future-work} suggests ways to remove this
+limitation and thus improve future empirical studies of Java's
+communication primitives.
+\end{sloppypar}
 
-  \begin{center}
-  \begin{tabular}{| c | c | c |}
-  \hline
-  Experiment & Sent by client & Received by client \\
-  \hline
-  \texttt{SS} & Single primitive & Single primitive \\
-  \texttt{SV} & Single primitive & Vector \\
-  \texttt{VS} & Vector & Single primitive \\
-  \texttt{VV} & Vector & Vector \\
-  \hline
-  \end{tabular}
-\end{center}
+\begin{equation} \label{eq:space_calculate}
+W(B,P) = \frac{1}{2}
+\end{equation}
 
-  \vspace*{-.1in}
-  \caption{Nano Benchmarks.}\label{tab:baselines}
-  %\vspace*{.05in}
+% NOTE: I am not sure that this sentence will be needed anymore -- it
+% may be, but only after I define another equation!
 
-\end{table}
-
-\begin{table}[t]
-
-  \begin{center}
-  \begin{tabular}{| c | c | c |}
-  \hline
-  Experiment & Sent by client & Received by client \\
-  \hline
-  \texttt{FIND} ({\tt SS}) & Single primitive & Single Primitive \\
-  \texttt{FACT} ({\tt SV}) & Single primitive & Vector \\
-  \texttt{GCD}  ({\tt VS}) & Vector & Single Primitive \\
-  \texttt{REV}  ({\tt VV}) & Vector & Vector \\
-  \hline
-  \end{tabular}
-\end{center}
-
-  \vspace*{-.1in}
-  \caption{Macro Benchmarks.}\label{tab:realworlds}
-  \vspace*{-.2in}
-
-\end{table}
+%% The change and percent change of the network consumption metric,
+%% $W(B,P)$, can be defined in a fashion analogous to
+%% Equations~(\ref{eq:time_change}) and~(\ref{eq:time_percent_incr}).
 
 % NOTE: Re-writing the entire paragraph to better avoid passive voice
 
@@ -719,22 +789,15 @@ and~(\ref{eq:time_percent_incr}).
 %% \cite{roubtsov-sizing}.
 %% \end{sloppypar}
 
-\begin{sloppypar}
-The benchmarking framework measures response time with timers that
-operate at two distinct levels of granularity.  We leverage the
-operating system tool \texttt{/usr/bin/time} to record the coarse
-granularity time overheads.  These operating system-based response
-times include the time required to start the client, communicate with
-the server, and shutdown the client.  The benchmarks use Java language
-instrumentation within the client source code in order to measure the
-fine granularity response times.  To this end, we implemented the
-benchmarks so that additional Java statements recording $\mbox{{\em
-    T}}_{start}(B,P)$ and $\mbox{{\em T}}_{complete}(B,P)$ enclose the
-invocation of the server.  We also use the {\tt jvmstat} and {\tt
-  hprof} tools to generate the behavior profiles for the JVM and we
-employ Roubtsov's object sizing technique to calculate the size of the
-method parameters and return values \cite{roubtsov-sizing}.
-\end{sloppypar}
+% NOTE: this is residual content; did I summarize correctly?
+
+%% upon the packets that were captured and generates an average packet
+%% size.  Because the average packet size is not based on the total
+%% number of packets received,
+
+\vspace*{-.05in}
+\subsection{Experiment Design}
+\label{sec:design}
 
 \begin{figure*}[t]
 \centering
@@ -761,36 +824,6 @@ method parameters and return values \cite{roubtsov-sizing}.
 Language-Based Timers.}\label{fig:baselines}
 \vspace*{-.1in}
 \end{figure*}
-
-\begin{sloppypar}
-Even though our focus is on intra-node communication, the use of HTTP
-and TCP/IP requires the client and server to transfer messages across
-the network interface.  Therefore, we configured the \texttt{tcpdump}
-tool to receive and attempt to record all of the packets that are
-transmitted across the network interface and we use the {\tt capinfos}
-tool to analyze the captured packets.  The data reported by {\tt
-  tcpdump} and {\tt capinfos} includes the (i) total number of packets
-received by the kernel filter, (ii) number of packets captured and
-stored for later analysis, and (iii) average packet size.  Due to the
-high rate of data transfer, the number of captured packets can be much
-lower than the number of packets that were received by the {\tt
-  tcpdump} filter.  Since \texttt{capinfos} can only analyze the
-captured packets, it is not always possible to accurately measure the
-total amount of network resources that the benchmark consumed during
-execution.  Section~\ref{sec:future-work} suggests ways to remove this
-limitation and thus improve future empirical studies of Java's
-communication primitives.
-\end{sloppypar}
-
-% NOTE: this is residual content; did I summarize correctly?
-
-%% upon the packets that were captured and generates an average packet
-%% size.  Because the average packet size is not based on the total
-%% number of packets received,
-
-\vspace*{-.05in}
-\subsection{Experiment Design}
-\label{sec:design}
 
 % explains what hyper-threading actually is; adds in a few more details
 
@@ -843,6 +876,14 @@ X-{\tt SS} because $.277-.17=.107$ is the smallest difference between
 two benchmarks and (ii) S-{\tt VV} to X-{\tt VV} since X-{\tt VV}
 shows the largest standard deviation.  Table~\ref{tab:XMLResults}
 summarizes the confidence intervals that we calculated.
+
+%% Finally, Equation~(\ref{eq:time_mean}) gives $R_\mu (\mathcal{R}, B,
+%% P, N)$, the arithmetic mean of the $N$ response time values for a
+%% specific benchmark $B$ and a remote communication primitive $P$.
+
+\begin{equation} \label{eq:time_mean}
+R_\mu (\mathcal{R}, B, P, N) = \frac{\displaystyle \sum_{R(B,P) \in \mathcal{R}} R(B,P)}{N}
+\end{equation}
 
 %\begin{sloppypar}
 We apply these additional statistical analyses under the assumptions
@@ -1048,7 +1089,7 @@ Table~\ref{tab:XMLResults} shows that the t-test rejects the null
 hypothesis and that sockets and XML-RPC have confidence intervals of
 [0.17,0.17] and [1.902,2.039], respectively.  While
 Table~\ref{tab:XMLResults} indicates that the confidence intervals for
-the {\tt FIND} benchmark do overlap, the t-test still rejects the null
+the {\tt GRAB} benchmark do overlap, the t-test still rejects the null
 hypothesis and thus we judge that the primitives have different
 response times.
 
@@ -1073,7 +1114,7 @@ from measuring response time with the language-based timer. The
 average across all benchmarks for sockets was 0.002375 seconds and
 0.506375 seconds for XML-RPC and as such {\small
   $R_\Delta^\%(B,S,X)$}$=212\%$.  Table~\ref{tab:XMLResults} confirms
-the same empirical trend: for the {\tt FIND}, {\tt GCD}, and {\tt REV}
+the same empirical trend: for the {\tt GRAB}, {\tt GCD}, and {\tt REV}
 benchmarks and the language timers, sockets are faster than XML-RPC in
 a statistically significant manner.  In summary, the micro and macro
 benchmarks indicate that the transmission of small vector and integer
@@ -1493,7 +1534,7 @@ Java's ``new input/output'' (NIO) package.
 \hline
  $R(REV,S_{5})$ vs $R(REV,X_{5})$  & [0.17, 0.17]   & [1.902, 2.039] \\
 \hline
- $R(FIND,S_{5})$ vs $R(FIND,X_{5})$ & [0.17, 0.17]   & [0.159, 0.191] \\
+ $R(GRAB,S_{5})$ vs $R(GRAB,X_{5})$ & [0.17, 0.17]   & [0.159, 0.191] \\
 \hline
  $R(GCD,S_{5})$ vs $R(GCD,X_{5})$  & [0.002, 0.003]   & [0.067, 0.104] \\
 \hline
