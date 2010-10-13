@@ -455,7 +455,7 @@ and (iv) dynamically, on a specific virtual machine and architecture.
 This paper focuses on the fourth category by analyzing the performance
 of Java-based RCPs on a specific JVM, computer architecture, and
 operating system kernel. The performance measurements that result from
-benchmark execution are also explained in light of JVM behavior
+benchmark execution are further explained in light of JVM behavior
 profiles.  Building on the insights developed by Heydon and Najork
 \cite{heydon-java-core}, this paper also examines how excessive heap
 allocation and the frequent execution of the garbage collector can
@@ -702,7 +702,7 @@ operating system tool \texttt{/usr/bin/time} to record the coarse
 granularity time overheads.  These operating system-based response
 times include the time required to start the client, communicate with
 the server, and shutdown the client.  The benchmarks use Java language
-instrumentation within the client source code to measure the fine
+instrumentation within the client's source code to measure the fine
 granularity response times.  The instrumentation records $\mbox{{\em
     T}}_{start}(B,P)$ before calling the server and then saves
 $\mbox{{\em T}}_{complete}(B,P)$ after the server finishes the
@@ -710,7 +710,7 @@ computation.
 \end{sloppypar}
 
 \begin{sloppypar}
-Unless specified otherwise, this paper always views the change and
+Unless specified otherwise, this paper always reports the change and
 percent change in response time when the socket communication
 primitive is replaced with XML-RPC.  For each of the benchmarks
 described in Section~\ref{sec:benchmark-framework}, the results
@@ -719,12 +719,12 @@ and {\small $R_\Delta^\%(B,S,X)$}.  A positive value for {\small
   $R_\Delta^\%(B,P,P')$} indicates an increase in $R(B,P)$ and a
 negative value shows that response time decreased when benchmark $B$
 uses primitive $P'$ instead of $P$.  The framework also use the {\tt
-  jvmstat} and {\tt hprof} tools to generate the JVM behavior profiles
+  jvmstat} and {\tt hprof} tools to generate each JVM behavior profile
 in $\mathcal{J}$.  Finally, the benchmarking framework employs
 Roubtsov's object sizing technique \cite{roubtsov-sizing} to calculate
 the size of the method parameters and return values and, for each
 benchmark $B$ and primitive $P$, it appends these values to the
-appropriate entity in $\mathcal{J}$.
+appropriate profile in $\mathcal{J}$.
 \end{sloppypar}
 
 %% The first are from an operating system-based timer,
@@ -740,7 +740,6 @@ appropriate entity in $\mathcal{J}$.
 %% Space overhead is collected for every ten executions of the client, or
 %% for every execution of the server.
 
-\begin{sloppypar}
 Even though our focus is on intra-node communication, the use of HTTP
 and TCP/IP requires the client and server to transfer messages across
 the network interface.  Therefore, we configured the \texttt{tcpdump}
@@ -755,13 +754,33 @@ lower than the number of packets that were received by the {\tt
   tcpdump} filter.  Since \texttt{capinfos} can only analyze the
 captured packets, it is not always possible to accurately measure the
 total amount of network resources that the benchmark consumed during
-execution.  Section~\ref{sec:future-work} suggests ways to remove this
-limitation and thus improve future empirical studies of Java's
-communication primitives.
+execution.  
+
+\begin{sloppypar}
+The benchmarking framework estimates the total network consumption in
+bytes, defined as $W(B,P, \Phi_c, \Phi_r)$ in
+Equation~(\ref{eq:space_calculate}), by multiplying the average size
+of the captured packets by the total number of packets received by the
+{\tt tcpdump} filter.  Equation~(\ref{eq:space_calculate}) uses
+$\Phi_c$ and $\Phi_r$ to respectively stand for the sets of captured
+and received packets.  Moreover, this equation uses the {\em size}
+function to return the size in bytes for a given packet $\upphi \in
+\Phi_c$.  $W(B,P, \Phi_c, \Phi_r)$ is a only estimate of the actual
+network consumption since it assumes that all packets that were
+received, but not captured and analyzed, are of the average size of
+those packets $\upphi \in \Phi_c$.  While the use of $W(B,P, \Phi_c,
+\Phi_r)$ is a reasonable first step towards approximating network
+consumption, Section~\ref{sec:future-work} suggests ways to avoid this
+estimation of network resource consumption and thus improve future
+empirical studies of Java's remote communication primitives.
 \end{sloppypar}
 
+\vspace*{-.1in}
+
 \begin{equation} \label{eq:space_calculate}
-W(B,P) = \frac{1}{2}
+W(B,P, \Phi_c, \Phi_r) = \frac{\displaystyle \sum_{\upphi \in \Phi_c}
+                   \mbox{{\em size}}(\upphi)}
+         {|\Phi_c|} \times |\Phi_r|
 \end{equation}
 
 % NOTE: I am not sure that this sentence will be needed anymore -- it
@@ -834,7 +853,7 @@ All experiments were conducted on a GNU/Linux workstation with kernel
 main memory, and 1 MB of L1 cache.  The workstation used a Serial ATA
 connection to the hard drive and CPU hyper-threading was enabled in
 order to support thread-level parallelism.  The experiments use a JVM
-version 1.5.0\_02 that was configured to operate in Java
+version 1.5.0\_02 that was set to operate in Java
 HotSpot\texttrademark client mode with a 64 MB heap.  Since our focus
 is on intra-node communication, we ran the benchmark client and server
 in separate JVMs on the same computational node.  If desired, the
@@ -842,8 +861,8 @@ benchmarking framework can be configured so that the client and server
 execute on separate nodes.  We implemented XML-RPC communication with
 Apache XML-RPC 2.0 and the socket-based benchmarks use the classes
 provided by the {\tt java.net} package. For the results in
-Section~\ref{sec:results}, we configured {\em ExperimentCampaign} so
-that $L=10$.  We also set $size(V) = 5$ in order to produce the
+Section~\ref{sec:results}, we initialized {\em ExperimentCampaign} so
+that $N=10$.  We also set $size(V) = 5$ in order to produce the
 empirical results described in Section~\ref{sec:time-overhead}.
 
 % NOTE: none of this content is needed because it was consolidated in
@@ -858,49 +877,78 @@ empirical results described in Section~\ref{sec:time-overhead}.
 %% of computation on the side of the server.  These benchmarks more
 %% closely resemble actual situations utilizing remote communication.
 
-Section~\ref{sec:results} analyzes response time measurements with
-descriptive statistics such as the arithmetic mean, denoted
-$\mu_{R(B,P)}$.  We also measure the dispersion of the $L$ response
-times within the sequence $R$ by calculating the standard deviation
-and representing this as an error bar in Figures~\ref{fig:baselines}
-through~\ref{fig:varying}.  Whenever the remote communication
-primitives demonstrate performance characteristics of the greatest
-similarity, we also calculate a mean confidence interval and perform a
-mean difference hypothesis test.  Within a group of similar
-benchmarks, we perform additional statistical analysis for the
-benchmark $B$ and the two primitives $P$ and $P'$ whenever (i)
-$R(B,P') - R(B,P)$ is small or (ii) either $R(B,P')$ or $R(B,P)$ has
-the largest standard deviation.  For instance, the results in
-Figure~\ref{fig:baselines}(a) prompted us to compare (i) S-{\tt SS} to
-X-{\tt SS} because $.277-.17=.107$ is the smallest difference between
-two benchmarks and (ii) S-{\tt VV} to X-{\tt VV} since X-{\tt VV}
-shows the largest standard deviation.  Table~\ref{tab:XMLResults}
-summarizes the confidence intervals that we calculated.
+Section~\ref{sec:results} analyzes the $N$ response time measurements
+in $\mathcal{R}$ with descriptive statistics such as the arithmetic
+mean, denoted $R_\mu (\mathcal{R}, B, P)$ and defined in
+Equation~(\ref{eq:time_mean}).  Figures~\ref{fig:baselines}
+through~\ref{fig:varying} graphically depict the value of
+$R_\mu(\mathcal{R}, B,P)$ by the height of the corresponding bar.  We
+also measure the dispersion of the $N$ response times in the sequence
+$\mathcal{R}$ by calculating the standard deviation, designated as
+$R_\sigma (\mathcal{R}, B, P)$ and defined in
+Equation~(\ref{eq:time_stdev}).  The graphs in
+Figures~\ref{fig:baselines} through~\ref{fig:varying} use an error bar
+to demarcate the range of values in the closed interval
+$[R_\mu(\mathcal{R}, B,P)-R_\sigma (\mathcal{R}, B, P),
+  R_\mu(\mathcal{R}, B,P)+R_\sigma (\mathcal{R}, B, P]$. Finally,
+Figures~\ref{fig:baselines} through~\ref{fig:varying} use a diamond to
+signal that the value of $R_\sigma (\mathcal{R}, B, P)$ is too small
+to graphically present at the top of a bar.
+
+\vspace*{-.1in}
+
+\begin{equation} \label{eq:time_mean}
+R_\mu (\mathcal{R}, B, P) = \frac{\displaystyle \sum_{R(B,P) \in \mathcal{R}} R(B,P)}{|\mathcal{R}|}
+\end{equation}
+
+\begin{equation} \label{eq:time_stdev}
+R_\sigma (\mathcal{R}, B, P) = 
+      \sqrt{\frac{\displaystyle \sum_{R(B,P) \in \mathcal{R}} 
+                                (R(B,P) - R_\mu (\mathcal{R}, B, P))^2}
+                 {|\mathcal{R}|}}
+\end{equation}
+
+
+Whenever the remote communication primitives demonstrate performance
+characteristics of the greatest similarity, we also calculate a mean
+confidence interval and perform a mean difference hypothesis test.
+Within a group of similar benchmarks $\upbeta$, we perform additional
+statistical analysis for a benchmark $B \in \upbeta$ and the two
+primitives $P$ and $P'$ whenever (i) $R(B,P') - R(B,P)$ is the
+smallest or (ii) either $R(B,P')$ or $R(B,P)$ has the largest standard
+deviation.  For instance, the results in Figure~\ref{fig:baselines}(a)
+prompted us to compare (i) S-{\tt SS} to X-{\tt SS} because
+$.277-.17=.107$ is the smallest difference between two benchmarks and
+(ii) S-{\tt VV} to X-{\tt VV} since X-{\tt VV} shows the largest
+standard deviation.  Table~\ref{tab:XMLResults} summarizes the
+confidence intervals that we calculated.
 
 %% Finally, Equation~(\ref{eq:time_mean}) gives $R_\mu (\mathcal{R}, B,
 %% P, N)$, the arithmetic mean of the $N$ response time values for a
 %% specific benchmark $B$ and a remote communication primitive $P$.
 
-\begin{equation} \label{eq:time_mean}
-R_\mu (\mathcal{R}, B, P, N) = \frac{\displaystyle \sum_{R(B,P) \in \mathcal{R}} R(B,P)}{N}
-\end{equation}
-
 %\begin{sloppypar}
+
 We apply these additional statistical analyses under the assumptions
 that (i) the response times adhere to an interval measurement scale,
-(ii) the $L$ samples within $R$ are independent, and (iii) the
-variances of the response times for the two different communication
-primitives are not equal.  Assumption (i) is justified because the
-difference between two response time measurements is meaningful (e.g.,
-if response time is measured in seconds, $R_1(B,P) = .15$, and
-$R_2(B,P) = .10$, then we can accurately say that $R_1$ is .05 seconds
-slower than $R_2$).  We judge that assumption (ii) is valid because
-{\em ExperimentCampaign} includes configurable pauses between each
-execution trial of a benchmark (we set the pause to five seconds for
-all of the empirical results in Section~\ref{sec:results}).  Since the
-results also demonstrate that the variances were not always exactly
-equal, we employ the Welch's approximate t-test instead of the
+(ii) the $N$ samples within $\mathcal{R}$ are independent, and (iii)
+the variances of the response times for the two different
+communication primitives are not equal.  Assumption (i) is justified
+because the difference between two response time measurements is
+meaningful. That is, if response time is measured in seconds and we
+have $R_1(B,P) = .15$ and $R_2(B,P) = .10$, then we can accurately say
+that $R_1$ is .05 seconds slower than $R_2$.  We judge that assumption
+(ii) is valid because {\em ExperimentCampaign} includes configurable
+pauses between each execution trial of a benchmark (we set the pause
+to five seconds for all of the empirical results in
+Section~\ref{sec:results}, although this time period is a configurable
+parameter of the framework).  Since the results also demonstrate that
+the variances were not always exactly equal, as stated in assumption
+(iii), we employ the Welch's approximate t-test rather than the
 traditional t-test.
+
+% that assumes equal variances.
+
 %\end{sloppypar}
 
 %% The framework calculates the CIs using the default configuration of
@@ -910,13 +958,15 @@ traditional t-test.
 %% In fact, Table~\ref{tab:XMLResults} reveals that many of the resulting
 %% confidence intervals are very tight.
 
-For a benchmark $B$ and two primitives $P$ and $P'$, we formulate the
-null hypothesis as $H_0: \mu_{R(B,P)} = \mu_{R(B,P')}$.  A rejection
-of $H_0$ suggests that primitives $P$ and $P'$ have different response
-time characteristics.  Since we configure the t-test with a
+For a benchmark $B$ and two remote communication primitives $P$ and
+$P'$, we formulate the null hypothesis as $H_0: R_\mu(B,P) =
+R_\mu(B,P')$.  A rejection of $H_0$ suggests that communication
+primitives $P$ and $P'$ have different response time characteristics
+and, all other factors being equal, we would prefer the primitive with
+the lower response time values.  Since we configured the t-test with a
 significance level of .01 (i.e., $\alpha=.01$), the data in
 Table~\ref{tab:XMLResults} represents the 99\% confidence interval
-(CI) for the arithmetic mean of the $L$ response times.  For each
+(CI) for the arithmetic mean of the $N$ response times.  For each
 response time mean in the confidence interval $[l, u]$, we can be
 $99\%$ certain that the mean of the response time values from
 subsequent experiments will fall between the lower bound $l$ and the
@@ -1005,7 +1055,7 @@ Language-Based Timers.}\label{fig:realworlds}
 %There was a higher variability for the language-based timer than for 
 %the operating system-based timer as evidenced by the fact.
 
-\subsubsection{Nano Benchmarks}
+%% \subsubsection{Nano Benchmarks}
 
 %% Finally, the socket implementation of the \texttt{VV}
 %% benchmark had a confidence interval of [0.17,0.17] and the XML-RPC
@@ -1013,22 +1063,22 @@ Language-Based Timers.}\label{fig:realworlds}
 %% fact that the confidence intervals do not overlap and the null
 %% hypothesis was rejected, these results are also significant.
 
-Figure~\ref{fig:baselines}(a) presents the results from measuring
-response time with the operating system-based timer when $size(V)=5$.
-The most important trend to note is that socket communication is
-always faster than XML-RPC.  For instance, the average across all
-benchmarks for sockets was 0.17 seconds compared to 0.283 seconds for
-XML-RPC.  It is further evident that {\small $R_\Delta^\%(\mbox{{\tt
-      VV}},S,X)$}$ = 66\%$ and there is no overlap in the standard
-deviation for each benchmark. As shown in Table~\ref{tab:XMLResults},
-the socket implementation of \texttt{SS} had a confidence interval of
-[0.17,0.17], while the interval for the XML-RPC primitive was
-[0.269,0.293].  These results are significant because the confidence
-intervals do not overlap and the result of the t-test was to reject
-the null hypothesis.  Finally, the summary information in
-Table~\ref{tab:XMLResults} also demonstrates that sockets and XML-RPC
-have statistically different response times for the \texttt{VV}
-benchmark.
+{\bf Nano Benchmarks}. Figure~\ref{fig:baselines}(a) presents the
+results from measuring response time with the operating system-based
+timer when $size(V)=5$.  The most important trend to note is that
+socket communication is always faster than XML-RPC.  For instance, the
+average across all benchmarks for sockets was 0.17 seconds compared to
+0.283 seconds for XML-RPC.  It is further evident that {\small
+  $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$ = 66\%$ and there is no overlap
+in the standard deviation for each benchmark. As shown in
+Table~\ref{tab:XMLResults}, the socket implementation of \texttt{SS}
+had a confidence interval of [0.17,0.17], while the interval for the
+XML-RPC primitive was [0.269,0.293].  These results are significant
+because the confidence intervals do not overlap and the result of the
+t-test was to reject the null hypothesis.  Finally, the summary
+information in Table~\ref{tab:XMLResults} also demonstrates that
+sockets and XML-RPC have statistically different response times for
+the \texttt{VV} benchmark.
 
 %% Socket communication is still clearly faster than XML-RPC
 %% communication and the socket primitive exhibits more predictable
@@ -1054,8 +1104,8 @@ null hypothesis.
 %% result of the t-test indicates that
 %% the null hypothesis can be rejected.
 
-\vspace*{-.1in}
-\subsubsection{Micro Benchmarks}
+%% \vspace*{-.1in}
+%% \subsubsection{Micro Benchmarks}
 
 %Figure~\ref{fig:realworlds} demonstrates the trends revealed by a 
 %comparison of socket and XML-RPC communication in Java using the macro 
@@ -1079,15 +1129,15 @@ null hypothesis.
 %% While the confidence intervals do overlap,
 %% the 
 
-Figure~\ref{fig:realworlds}(a) gives the results from measuring
-response time with the operating system-based timer when $size(V) =
-5$.  Across all macro benchmarks, we note that the mean time overhead
-for sockets was 0.17 seconds, the XML-RPC primitive yielded an average
-response time of 0.702 seconds, and {\small
-  $R_\Delta^\%(B,S,X)$}$=313\%$.  For the \texttt{REV} benchmark,
-Table~\ref{tab:XMLResults} shows that the t-test rejects the null
-hypothesis and that sockets and XML-RPC have confidence intervals of
-[0.17,0.17] and [1.902,2.039], respectively.  While
+{\bf Micro Benchmarks}. Figure~\ref{fig:realworlds}(a) gives the
+results from measuring response time with the operating system-based
+timer when $size(V) = 5$.  Across all macro benchmarks, we note that
+the mean time overhead for sockets was 0.17 seconds, the XML-RPC
+primitive yielded an average response time of 0.702 seconds, and
+{\small $R_\Delta^\%(B,S,X)$}$=313\%$.  For the \texttt{REV}
+benchmark, Table~\ref{tab:XMLResults} shows that the t-test rejects
+the null hypothesis and that sockets and XML-RPC have confidence
+intervals of [0.17,0.17] and [1.902,2.039], respectively.  While
 Table~\ref{tab:XMLResults} indicates that the confidence intervals for
 the {\tt GRAB} benchmark do overlap, the t-test still rejects the null
 hypothesis and thus we judge that the primitives have different
@@ -2080,7 +2130,7 @@ benchmarks.
 % overheads at large data sizes and performs better than sockets in
 % network bandwidth in the majority of cases.
 
-{\normalsize
+{\small
 \bibliographystyle{abbrv}
 \bibliography{sig-alternate} }
 
