@@ -12,7 +12,6 @@
 \usepackage{upgreek}
 
 \usepackage[named]{algo}
-
 \begin{document}
 
 %\conferenceinfo{PPPJ}{2006 Mannheim, Germany}
@@ -309,7 +308,7 @@ contributions of this paper include: \vspace*{-.1in}
 
 %% Area for motivation content.
 
-\section{Background}
+\section{Motivating Principles}
 \label{sec:background}
 
 \subsection{Communication Primitives}
@@ -359,7 +358,7 @@ to facilitate client communication \cite{rhea-opendht}.
 
 The {\tt java.net.Socket} class provides an endpoint for communication
 between two JVMs.  The {\tt bind} operation attaches a socket to a
-local address on a computation node.  The {\tt accept} method blocks
+local address on a computational node.  The {\tt accept} method blocks
 the socket server until a connection from a client occurs and the {\tt
   connect} operation allows the client to actively seek out a server
 at a specified address.  Sockets also furnish {\tt send} and {\tt
@@ -444,7 +443,7 @@ values).\footnote{{\small Since the metric prefix ``nano'' ($10^{-9}$)
     system. }}  The micro benchmarks incorporate small and
 well-defined operations (e.g., finding a data value in a list or
 reversing the provided list) that require server-side computations and
-thus may be found in real-world local-remote systems.
+thus may be found in a real-world local-remote system.
 \end{sloppypar}
 
 According to Horgan et al. \cite{horgan-measure-runtime}, the
@@ -484,7 +483,7 @@ Figure~\ref{fig:experiment-campaign} describes the {\em
   ExperimentCampaign} that executes $N$ trials of benchmark $B$ when
 it is configured to use communication primitive $P$. Line~\ref{init}
 of Figure~\ref{fig:experiment-campaign} respectively initializes the
-sequences (i.e., ordered tuples) of response times ($\mathcal{R}$),
+tuples (i.e., ordered lists) of response times ($\mathcal{R}$),
 network resource consumptions ($\mathcal{W}$), and JVM behavior
 profiles ($\mathcal{J}$) so that they can be populated with
 measurements during the execution of the experiments.  The socket or
@@ -512,12 +511,12 @@ evaluation metrics.
  \begin{center}
       \begin{algorithm}{ExperimentCampaign}[B, P, N]
         { \qinput{Benchmark $B$; \newline 
-	    \hspace*{.16in} Communication Primitive $P$; \newline
+	    \hspace*{.16in} Remote Communication Primitive $P$; \newline
             %\hspace*{.16in} Communication Vector $V$; \newline
             \hspace*{.16in} Number of Experiment Trials $N$;}
-	  \qoutput{Response Time Sequence $\mathcal{R}$; \newline
-            \hspace*{.26in} Network Consumption Sequence $\mathcal{W}$; \newline
-	    \hspace*{.26in} JVM Profile Sequence $\mathcal{J}$}
+	  \qoutput{Response Time Tuple $\mathcal{R}$; \newline
+            \hspace*{.26in} Network Consumption Tuple $\mathcal{W}$; \newline
+	    \hspace*{.26in} JVM Profile Tuple $\mathcal{J}$}
         } 
     $\mathcal{R} \qlet \emptyset; \; \mathcal{W} \qlet \emptyset; \; \mathcal{J} \qlet \emptyset$; \label{init}\\	
     \mbox{{\em StartServer}}$(B,P)$ \label{start}\\
@@ -627,7 +626,7 @@ client.
   Experiment & Sent by client & Received by client \\
   \hline
   \texttt{GRAB} ({\tt SS}) & Single value & Single value \\
-  \texttt{FACT} ({\tt SV}) & Single primitive & Vector \\
+  \texttt{FACT} ({\tt SV}) & Single value & Vector \\
   \texttt{GCD}  ({\tt VS}) & Vector & Single value \\
   \texttt{REV}  ({\tt VV}) & Vector & Vector \\
   \hline
@@ -667,8 +666,8 @@ Since it is often useful to calculate how response time changes when
 $P'$ replaces $P$ for a set of benchmarks designated $\upbeta$ (e.g.,
 all of the micro benchmarks in Table~\ref{tab:realworlds}),
 Equation~(\ref{eq:time_percent_incr_set}) characterizes {\small
-  $R_\Delta^\%(\upbeta,P,P')$}, the average percent change in response
-time over all of the benchmarks $B \in \upbeta$.
+  $\bar{R}_\Delta^\%(\upbeta,P,P')$}, the average percent change in
+response time over all of the benchmarks $B \in \upbeta$.
 
 \vspace*{-.1in}
 
@@ -691,7 +690,7 @@ R_\Delta^\%(B,P,P')  = \frac{R_\Delta (B,P,P')}{R(B,P)} \times 100
 \vspace*{-.1in}
 
 \begin{equation} \label{eq:time_percent_incr_set}
-R_\Delta^\%(\upbeta,P,P')  = \frac{\displaystyle \sum_{B\in\upbeta} R_\Delta^\% (B,P,P')}
+\bar{R}_\Delta^\%(\upbeta,P,P')  = \frac{\displaystyle \sum_{B\in\upbeta} R_\Delta^\% (B,P,P')}
                           {|\upbeta|} 
 \end{equation}
 
@@ -709,6 +708,10 @@ $\mbox{{\em T}}_{complete}(B,P)$ after the server finishes the
 computation.
 \end{sloppypar}
 
+%% A positive value for {\small $R_\Delta^\%(B,P,P')$} indicates an
+%% increase in $R(B,P)$ and a negative value shows that response time
+%% decreased when benchmark $B$ uses primitive $P'$ instead of $P$.
+
 \begin{sloppypar}
 Unless specified otherwise, this paper always reports the change and
 percent change in response time when the socket communication
@@ -716,15 +719,16 @@ primitive is replaced with XML-RPC.  For each of the benchmarks
 described in Section~\ref{sec:benchmark-framework}, the results
 analysis in Section~\ref{sec:results} always reports $R_\Delta(B,S,X)$
 and {\small $R_\Delta^\%(B,S,X)$}.  A positive value for {\small
-  $R_\Delta^\%(B,P,P')$} indicates an increase in $R(B,P)$ and a
-negative value shows that response time decreased when benchmark $B$
-uses primitive $P'$ instead of $P$.  The framework also use the {\tt
-  jvmstat} and {\tt hprof} tools to generate each JVM behavior profile
-in $\mathcal{J}$.  Finally, the benchmarking framework employs
-Roubtsov's object sizing technique \cite{roubtsov-sizing} to calculate
-the size of the method parameters and return values and, for each
-benchmark $B$ and primitive $P$, it appends these values to the
-appropriate profile in $\mathcal{J}$.
+  $R_\Delta^\%(B,P,P')$} indicates that response time increased when
+$B$ used primitive $P'$ instead of $P$.  Alternatively, a negative
+value signals a decrease in response time when $B$ uses $P'$ rather
+than $P$.  The framework also use the {\tt jvmstat} and {\tt hprof}
+tools to generate each JVM behavior profile in $\mathcal{J}$.
+Finally, the benchmarking framework employs Roubtsov's object sizing
+technique \cite{roubtsov-sizing} to calculate the size of the method
+parameters and return values and, for each benchmark $B$ and primitive
+$P$, it appends these values to the appropriate profile in
+$\mathcal{J}$.
 \end{sloppypar}
 
 %% The first are from an operating system-based timer,
@@ -783,6 +787,8 @@ W(B,P, \Phi_c, \Phi_r) = \frac{\displaystyle \sum_{\upphi \in \Phi_c}
          {|\Phi_c|} \times |\Phi_r|
 \end{equation}
 
+\vspace*{-.05in}
+
 % NOTE: I am not sure that this sentence will be needed anymore -- it
 % may be, but only after I define another equation!
 
@@ -815,7 +821,7 @@ W(B,P, \Phi_c, \Phi_r) = \frac{\displaystyle \sum_{\upphi \in \Phi_c}
 %% number of packets received,
 
 \vspace*{-.05in}
-\subsection{Experiment Design}
+\subsection{Experiment Design and Analysis Methods}
 \label{sec:design}
 
 \begin{figure*}[t]
@@ -883,7 +889,7 @@ mean, denoted $R_\mu (\mathcal{R}, B, P)$ and defined in
 Equation~(\ref{eq:time_mean}).  Figures~\ref{fig:baselines}
 through~\ref{fig:varying} graphically depict the value of
 $R_\mu(\mathcal{R}, B,P)$ by the height of the corresponding bar.  We
-also measure the dispersion of the $N$ response times in the sequence
+also measure the dispersion of the $N$ response times in the tuple
 $\mathcal{R}$ by calculating the standard deviation, designated as
 $R_\sigma (\mathcal{R}, B, P)$ and defined in
 Equation~(\ref{eq:time_stdev}).  The graphs in
@@ -891,15 +897,17 @@ Figures~\ref{fig:baselines} through~\ref{fig:varying} use an error bar
 to demarcate the range of values in the closed interval
 $[R_\mu(\mathcal{R}, B,P)-R_\sigma (\mathcal{R}, B, P),
   R_\mu(\mathcal{R}, B,P)+R_\sigma (\mathcal{R}, B, P]$. Finally,
-Figures~\ref{fig:baselines} through~\ref{fig:varying} use a diamond to
-signal that the value of $R_\sigma (\mathcal{R}, B, P)$ is too small
-to graphically present at the top of a bar.
+Figures~\ref{fig:baselines} through~\ref{fig:varying} use a diamond at
+the top of a bar to signal that the value of $R_\sigma (\mathcal{R},
+B, P)$ is too small to graphically present.
 
 \vspace*{-.1in}
 
 \begin{equation} \label{eq:time_mean}
 R_\mu (\mathcal{R}, B, P) = \frac{\displaystyle \sum_{R(B,P) \in \mathcal{R}} R(B,P)}{|\mathcal{R}|}
 \end{equation}
+
+\vspace*{-.05in}
 
 \begin{equation} \label{eq:time_stdev}
 R_\sigma (\mathcal{R}, B, P) = 
@@ -1608,7 +1616,7 @@ Java's ``new input/output'' (NIO) package.
 
 \vspace*{-.15in}
 
-\caption{Summary Table for Statistical Analysis.}
+\caption{Summary Table for the Confidence Intervals and Hypothesis Tests.}
 \label{tab:XMLResults}
 
 \vspace*{-.1in}
