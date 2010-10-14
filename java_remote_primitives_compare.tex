@@ -1077,8 +1077,8 @@ timer when $size(V)=5$.  The most important trend to note is that
 socket communication is always faster than XML-RPC.  For instance, the
 average across all benchmarks for sockets was 0.17 seconds compared to
 0.283 seconds for XML-RPC.  It is further evident that {\small
-  $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$ = 66\%$ and there is no overlap
-in the standard deviation for each benchmark. As shown in
+  $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$ = 70.58\%$ and there is no
+overlap in the standard deviation for each benchmark. As shown in
 Table~\ref{tab:XMLResults}, the socket implementation of \texttt{SS}
 had a confidence interval of [0.17,0.17], while the interval for the
 XML-RPC primitive was [0.269,0.293].  These results are significant
@@ -1101,7 +1101,7 @@ obtained with the language-based timer.  These results suggest that
 sockets are both faster and more predictable than XML-RPC.  For
 example, the average across all benchmarks was 0.00665 seconds for
 sockets and 0.089025 seconds for XML-RPC.  We also observe that
-{\small $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$=268\%$ and there is no
+{\small $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$=278.48\%$ and there is no
 overlap in the standard deviation for each benchmark.  Finally,
 Table~\ref{tab:XMLResults} reveals that the primitives have difference
 performance characteristics since the (i) socket implementation of the
@@ -1139,10 +1139,10 @@ null hypothesis.
 
 {\bf Micro Benchmarks}. Figure~\ref{fig:realworlds}(a) gives the
 results from measuring response time with the operating system-based
-timer when $size(V) = 5$.  Across all macro benchmarks, we note that
+timer when $size(V) = 5$.  Across all micro benchmarks, we note that
 the mean time overhead for sockets was 0.17 seconds, the XML-RPC
 primitive yielded an average response time of 0.702 seconds, and
-{\small $R_\Delta^\%(B,S,X)$}$=313\%$.  For the \texttt{REV}
+{\small $R_\Delta^\%(B,S,X)$}$=312.94\%$.  For the \texttt{REV}
 benchmark, Table~\ref{tab:XMLResults} shows that the t-test rejects
 the null hypothesis and that sockets and XML-RPC have confidence
 intervals of [0.17,0.17] and [1.902,2.039], respectively.  While
@@ -1582,33 +1582,33 @@ Java's ``new input/output'' (NIO) package.
 \begin{tabular}{|c||c|c|}
 
 \hline
- {\bf Comparison}     &{\bf CI Sockets}     &{\bf CI XML-RPC} \\
+ {\bf Comparison}     &{\bf CI - Sockets} & {\bf CI - XML-RPC} \\
 \hline
- $R(SS,S_{5})$ vs $ R(SS,X_{5})$  & [0.17, 0.17]   & [0.269, 0.293] \\
+ $R(\mbox{\texttt{SS}},S_{5})$ vs $ R(\mbox{\texttt{SS}},X_{5})$  & [0.17, 0.17]   & [0.269, 0.293] \\
 \hline
- $R(VV,S_{5})$ vs $R(SS,X_{5})$   & [0.17, 0.17]   & [0.252, 0.328] \\
+ $R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$   & [0.17, 0.17]   & [0.252, 0.328] \\
 \hline
- $R(VV,S_{5})$ vs $R(VV,X_{5})$  & [0.023, 0.025]   & [0.072, 0.107] \\
+ $R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$  & [0.023, 0.025]   & [0.072, 0.107] \\
 \hline
- $R(REV,S_{5})$ vs $R(REV,X_{5})$  & [0.17, 0.17]   & [1.902, 2.039] \\
+ $R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$  & [0.17, 0.17]   & [1.902, 2.039] \\
 \hline
- $R(GRAB,S_{5})$ vs $R(GRAB,X_{5})$ & [0.17, 0.17]   & [0.159, 0.191] \\
+ $R(\mbox{\texttt{GRAB}},S_{5})$ vs $R(\mbox{\texttt{GRAB}},X_{5})$ & [0.17, 0.17]   & [0.159, 0.191] \\
 \hline
- $R(GCD,S_{5})$ vs $R(GCD,X_{5})$  & [0.002, 0.003]   & [0.067, 0.104] \\
+ $R(\mbox{\texttt{GCD}},S_{5})$ vs $R(\mbox{\texttt{GCD}},X_{5})$  & [0.002, 0.003]   & [0.067, 0.104] \\
 \hline
- $R(REV,S_{5})$ vs $R(REV,X_{5})$& [0.002, 0.004]   & [1.687, 1.834] \\
+ $R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$& [0.002, 0.004]   & [1.687, 1.834] \\
 \hline
- $R(SV,S_{500})$ vs $R(SV,X_{500})$& [0.050, 0.058]   & [0.106, 0.156] \\
+ $R(\mbox{\texttt{SV}},S_{500})$ vs $R(\mbox{\texttt{SV}},X_{500})$& [0.050, 0.058]   & [0.106, 0.156] \\
 \hline
- $R(VS,S_{500})$ vs $R(VS,X_{500})$& [0.019, 0.042]   & [0.089, 0.148] \\
+ $R(\mbox{\texttt{VS}},S_{500})$ vs $R(\mbox{\texttt{VS}},X_{500})$& [0.019, 0.042]   & [0.089, 0.148] \\
 \hline
- $R(VV,S_{500})$ vs $R(VV,X_{500})$ & [0.090, 0.119]   & [0.128, 0.201] \\
+ $R(\mbox{\texttt{VV}},S_{500})$ vs $R(\mbox{\texttt{VV}},X_{500})$ & [0.090, 0.119]   & [0.128, 0.201] \\
 \hline
- $R(VV,S_{5000})$ vs $R(VV,X_{5000})$   & [0.292, 0.304] & [0.292, 0.401] \\
+ $R(\mbox{\texttt{VV}},S_{5000})$ vs $R(\mbox{\texttt{VV}},X_{5000})$   & [0.292, 0.304] & [0.292, 0.401] \\
 \hline
- $ R(VV,S_{10000})$ vs $ R(VV,X_{10000})$   & [0.588, 0.608] & [0.469, 0.577] \\
+ $ R(\mbox{\texttt{VV}},S_{10000})$ vs $ R(\mbox{\texttt{VV}},X_{10000})$   & [0.588, 0.608] & [0.469, 0.577] \\
 \hline
- $ R(VV,S_{50000})$ vs $ R(VV,X_{50000})$  & [18.078, 19.490]  & [1.616, 1.777] \\
+ $ R(\mbox{\texttt{VV}},S_{50000})$ vs $ R(\mbox{\texttt{VV}},X_{50000})$  & [18.078, 19.490]  & [1.616, 1.777] \\
 
 \hline
 \end{tabular}
