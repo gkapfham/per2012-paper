@@ -1080,13 +1080,13 @@ average across all benchmarks for sockets was 0.17 seconds compared to
   $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$ = 70.58\%$ and there is no
 overlap in the standard deviation for each benchmark. As shown in
 Table~\ref{tab:XMLResults}, the socket implementation of \texttt{SS}
-had a confidence interval of [0.17,0.17], while the interval for the
-XML-RPC primitive was [0.269,0.293].  These results are significant
-because the confidence intervals do not overlap and the result of the
-t-test was to reject the null hypothesis.  Finally, the summary
-information in Table~\ref{tab:XMLResults} also demonstrates that
-sockets and XML-RPC have statistically different response times for
-the \texttt{VV} benchmark.
+had a confidence interval of [0.17,0.17], while the interval for
+XML-RPC's response times was [0.269,0.293].  These results are
+significant because the confidence intervals do not overlap and the
+result of the t-test was to reject the null hypothesis.  Finally, the
+summary information in Table~\ref{tab:XMLResults} also demonstrates
+that sockets and XML-RPC have statistically different response times
+for the \texttt{VV} benchmark.
 
 %% Socket communication is still clearly faster than XML-RPC
 %% communication and the socket primitive exhibits more predictable
@@ -1102,12 +1102,12 @@ sockets are both faster and more predictable than XML-RPC.  For
 example, the average across all benchmarks was 0.00665 seconds for
 sockets and 0.089025 seconds for XML-RPC.  We also observe that
 {\small $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$=278.48\%$ and there is no
-overlap in the standard deviation for each benchmark.  Finally,
-Table~\ref{tab:XMLResults} reveals that the primitives have difference
-performance characteristics since the (i) socket implementation of the
-\texttt{VV} benchmark has a confidence interval of [0.023,0.025], (ii)
-XML-RPC has an interval of [0.072,0.107], and (iii) t-test rejects the
-null hypothesis.
+overlap in the standard deviation for each benchmark's time overhead.
+Finally, Table~\ref{tab:XMLResults} reveals that the communication
+primitives have difference performance characteristics since the (i)
+socket implementation of \texttt{VV} has a confidence interval of
+[0.023,0.025], (ii) XML-RPC has an interval of [0.072,0.107], and
+(iii) the t-test rejects the null hypothesis.
 
 %% result of the t-test indicates that
 %% the null hypothesis can be rejected.
@@ -1141,15 +1141,17 @@ null hypothesis.
 results from measuring response time with the operating system-based
 timer when $size(V) = 5$.  Across all micro benchmarks, we note that
 the mean time overhead for sockets was 0.17 seconds, the XML-RPC
-primitive yielded an average response time of 0.702 seconds, and
-{\small $R_\Delta^\%(B,S,X)$}$=312.94\%$.  For the \texttt{REV}
-benchmark, Table~\ref{tab:XMLResults} shows that the t-test rejects
-the null hypothesis and that sockets and XML-RPC have confidence
+primitive yielded an average response time of 0.702 seconds, and we
+further calculate that {\small $\bar{R}_\Delta^\%(B,S,X)$}$=312.94\%$.
+For the \texttt{REV} benchmark, Table~\ref{tab:XMLResults} shows that
+the t-test rejects $H_0$ and that sockets and XML-RPC have confidence
 intervals of [0.17,0.17] and [1.902,2.039], respectively.  While
 Table~\ref{tab:XMLResults} indicates that the confidence intervals for
-the {\tt GRAB} benchmark do overlap, the t-test still rejects the null
-hypothesis and thus we judge that the primitives have different
-response times.
+{\tt GRAB}'s response times do overlap, the t-test still rejects the
+null hypothesis and thus we judge that the primitives have different
+time overheads.  In this case, the t-test rejects $H_0$ because socket
+implementation of {\tt GRAB} exhibits no variability in the response
+time metric.
 
 %% For all benchmarks $B$, {\small $R_\Delta^\%(B,S,X)$}$=212\%$ on
 %% average and there is no overlap in the standard deviation when a
@@ -1171,13 +1173,14 @@ Figure~\ref{fig:realworlds}(b) depicts the results that were obtained
 from measuring response time with the language-based timer. The
 average across all benchmarks for sockets was 0.002375 seconds and
 0.506375 seconds for XML-RPC and as such {\small
-  $R_\Delta^\%(B,S,X)$}$=212\%$.  Table~\ref{tab:XMLResults} confirms
-the same empirical trend: for the {\tt GRAB}, {\tt GCD}, and {\tt REV}
-benchmarks and the language timers, sockets are faster than XML-RPC in
-a statistically significant manner.  In summary, the micro and macro
-benchmarks indicate that the transmission of small vector and integer
-parameters (i.e., $size(V)=5$) causes the socket primitive to display
-response times that are lower and less variable than XML-RPC's.
+  $R_\Delta^\%(B,S,X)$}$=213.11\%$.  Table~\ref{tab:XMLResults}
+confirms the same empirical trend: for the {\tt GRAB}, {\tt GCD}, and
+{\tt REV} benchmarks and the language timers, sockets are faster than
+XML-RPC in a statistically significant manner.  In summary, the micro
+and macro benchmarks indicate that the transmission of small vector
+and integer parameters (i.e., $size(V)=5$) causes the socket primitive
+to display response times that are lower and less variable than
+XML-RPC's.
 
 \subsection{Vector Size Variation}
 \label{sec:variation}
@@ -1582,7 +1585,7 @@ Java's ``new input/output'' (NIO) package.
 \begin{tabular}{|c||c|c|}
 
 \hline
- {\bf Comparison}     &{\bf CI - Sockets} & {\bf CI - XML-RPC} \\
+ {\bf Comparison}     & {\bf CI for Sockets} & {\bf CI for XML-RPC} \\
 \hline
  $R(\mbox{\texttt{SS}},S_{5})$ vs $ R(\mbox{\texttt{SS}},X_{5})$  & [0.17, 0.17]   & [0.269, 0.293] \\
 \hline
