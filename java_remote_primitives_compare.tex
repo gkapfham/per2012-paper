@@ -1178,9 +1178,9 @@ confirms the same empirical trend: for the {\tt GRAB}, {\tt GCD}, and
 {\tt REV} benchmarks and the language timers, sockets are faster than
 XML-RPC in a statistically significant manner.  In summary, the micro
 and macro benchmarks indicate that the transmission of small vector
-and integer parameters (i.e., $size(V)=5$) causes the socket primitive
-to display response times that are lower and less variable than
-XML-RPC's.
+and integer parameters (i.e., $size(V)=5$) causes the socket
+communication primitive to display response times that are lower and
+less variable than XML-RPC's.
 
 \subsection{Vector Size Variation}
 \label{sec:variation}
@@ -1232,21 +1232,24 @@ impacted response time.  Table~\ref{tab:sizes} gives the different
 values of $size(V)$ for each execution of {\em ExperimentCampaign}.
 Figure~\ref{fig:varying}(a) furnishes the results from varying
 $size(V)$ with \texttt{SV}. The experiments indicate that {\small
-  $R_\Delta^\%(\mbox{{\tt SV}},S_5,S_{500})$}$=4069\%$ and {\small
-  $R_\Delta^\%(\mbox{{\tt SV}},X_5,X_{500})$}$=53\%$.  The very low
-response time associated with socket-based communication when
+  $R_\Delta^\%(\mbox{{\tt SV}},S_5,S_{500})$}$=4069.00\%$ and {\small
+  $R_\Delta^\%(\mbox{{\tt
+      SV}},X_5,X_{500})$}$=53.39\%$.\footnote{{\small In the remainder
+    of this paper the notation $P_k$ denotes the use of communication
+    primitive $P$ to transmit a vector with $k$ entries.}}  The very
+low response time associated with socket-based communication when
 $size(V)=5$ causes the large percent increase when $S_{500}$ is
 executed instead of $S_{5}$.  Yet, the results in
 Figure~\ref{fig:varying}(a) also reveal that {\small
-  $R_\Delta^\%(\mbox{{\tt SV}},S_{500},X_{500})$}$=142\%$ and thus
+  $R_\Delta^\%(\mbox{{\tt SV}},S_{500},X_{500})$}$=141.60\%$ and thus
 sockets still exhibit lower and less dispersed response times than
 XML-RPC.  The summary results in Table~\ref{tab:XMLResults} confirm
 this trend since sockets and XML-RPC have respective confidence
-intervals of [0.050,0.058] and [0.106,0.156].  Overall,
-Figures~\ref{fig:varying}(a) through \ref{fig:varying}(c) and
-Table~\ref{tab:XMLResults} support the conclusion that sockets are
-faster than XML-RPC when the maximum value of $size(V)$ is less than
-or equal to 500.
+intervals of [0.050,0.058] and [0.106,0.156] and the t-test rejects
+$H_0$.  Overall, Figures~\ref{fig:varying}(a) through
+\ref{fig:varying}(c) and Table~\ref{tab:XMLResults} support the
+conclusion that sockets are faster than XML-RPC when the maximum value
+of $size(V)$ is less than or equal to 500.
 
 \begin{figure*}[t]
 \centering
@@ -1363,7 +1366,7 @@ increased $size(V)$ to very large values during the execution of
 \texttt{VV}.  Overall, sockets are faster than XML-RPC when
 $size(V)=5000$, whereas XML-RPC demonstrates a slight performance
 advantage when the vectors have 10000 items.  Further analysis reveals
-that {\small$R_\Delta^\%(\mbox{{\tt VV}},S_{5000},X_{5000})=$}16\% and
+that {\small$R_\Delta^\%(\mbox{{\tt VV}},S_{5000},X_{5000})=$}16.44\% and
 the two primitives have overlapping confidence intervals of
 [0.292,0.304] for sockets and [0.292,0.401] for XML-RPC.  Even though
 these intervals overlap, the result of the t-test was to reject the
@@ -1391,21 +1394,18 @@ between $.316$ and $.35$ seconds.
 %% quit
 
 Executing {\tt VV} with $size(V)=10000$ exposes the fact that
-{\small$R_\Delta^\%(\mbox{{\tt VV}},S_{10000},X_{10000})=$}$-12\%$ and
-thus XML-RPC exhibits better response times than sockets.  The
+{\small$R_\Delta^\%(\mbox{{\tt VV}},S_{10000},X_{10000})=$}$-12.54\%$
+and thus XML-RPC exhibits better response times than sockets.  The
 confidence intervals for sockets and XML-RPC were respectively
 [0.588,0.608] and [0.469,0.577] and the result of the t-test was to
 reject the null hypothesis.  Table~\ref{tab:increasebig} also shows
 that the results for $size(V)=50000$ were more pronounced and thus
-{\small$R_\Delta^\%(\mbox{{\tt VV}},S_{50000},X_{50000})=$}$-1006\%$.
-The confidence interval for the socket implementation was
-[18.078,19.490], the interval for XML-RPC was [1.616,1.777], and the
-t-test rejected the null hypothesis.  These results clearly
-demonstrate that the socket implementation performs worse than the
-XML-RPC primitive when transmitting large parameters and return
-values.  We explored a wide range of parameter settings in order to
-ensure that this marked performance change was not due to an improper
-configuration of sockets.
+{\small$R_\Delta^\%(\mbox{{\tt VV}},S_{50000},X_{50000})=$}$-90.96\%$.
+The confidence interval for the responses times of the socket
+implementation was [18.078,19.490], the interval for XML-RPC was
+[1.616,1.777], and the t-test rejected the null hypothesis.  These
+results clearly demonstrate that sockets perform worse than XML-RPC
+when transmitting large parameters and return values.
 
 %% the {\tt java.net} library.
 
@@ -1417,19 +1417,21 @@ configuration of sockets.
 %%   setPerformancePreferences(0,1,0)} in order to indicate that low
 %% latency should be favored over all other performance measures.
 
-For instance, increasing the size of the socket server's JVM heap to
-256 MB or modifying the size of the socket's send and receive buffers
-with the {\tt setSendBufferSize} and {\tt setReceiveBufferSize}
-methods provided by {\tt java.net.Socket} did not change the response
-time results in Table~\ref{tab:increasebig}.  We also used the {\tt
-  setPerformancePreferences(CON, LAT, BAN}) to modify the performance
-preferences for the socket primitive and this did not change the
-results for the socket-based version of {\tt VV}.  The parameters {\tt
-  CON}, {\tt LAT}, and {\tt BAN} respectively indicate the relative
-importance of short connection time, low latency, and high bandwidth.
-Yet, response times did not differ when we called {\tt
-  setPerformancePreferences(0,1,0)} in order to favor low latency over
-connection time and bandwidth.
+We explored a wide range of parameter settings in order to ensure that
+this marked performance change was not due to an improper
+configuration of sockets.  For instance, increasing the size of the
+socket server's JVM heap to 256 MB or modifying the size of the
+socket's send and receive buffers with the {\tt setSendBufferSize} and
+{\tt setReceiveBufferSize} methods provided by {\tt java.net.Socket}
+did not change the results in Table~\ref{tab:increasebig}.  We also
+used the {\tt setPerformancePreferences(CON, LAT, BAN}) to modify the
+performance preferences for the socket primitive and this did not
+change the results for the socket-based version of {\tt VV}.  The
+parameters {\tt CON}, {\tt LAT}, and {\tt BAN} respectively indicate
+the relative importance of short connection time, low latency, and
+high bandwidth.  Yet, response times did not differ when we called
+{\tt setPerformancePreferences(0,1,0)} in order to favor low latency
+over connection time and bandwidth.
 
 %% A cumulative distribution function (CDF) give the probability than a
 %% random variable X is less that a given value x. (F(x) = Pr{X<=x}). An
@@ -1449,9 +1451,14 @@ connection time and bandwidth.
   50000 & 927,720  & 18.784 & 1.697\\
   \hline
   \end{tabular} 
+
+  \vspace*{.1in}
+
+  \fbox{All Response Times Calculated by the Java Timers}
+
   \end{center} %}
 
-  \vspace*{-.15in}
+  \vspace*{-.175in}
   \caption{Response Time with Very Large Vectors.}
   \label{tab:increasebig}
 
@@ -1543,7 +1550,7 @@ $size(V)=10000$, the YGC and FGC events only increase response time by
 \vspace*{-.1in}
 \caption{Response Time for {\tt VV} when $size(V)=5000$.}
 \label{fig:ecdf}
-%\vspace*{-.1in}
+\vspace*{-.1in}
 \end{figure}
 
 %% Table~\ref{tab:allocate} shows that the XML-RPC primitive has a higher
@@ -1615,6 +1622,12 @@ Java's ``new input/output'' (NIO) package.
 
 \hline
 \end{tabular}
+
+\vspace*{.15in}
+
+\fbox{For Each Row, the T-test Rejected $H_0$ at a Significance Level
+  of $0.01$}
+
 \end{center}
 
 \vspace*{-.15in}
@@ -1876,12 +1889,12 @@ analysis of software applications implemented in Java.
 
 % NOTE: consider adding this in depending upon length!
 
-\subsection{Communication Primitives}
-\label{sec:comm-prim-rw}
+%% \subsection{Communication Primitives}
+%% \label{sec:comm-prim-rw}
 
-The micro-kernel is an example of an operating system whose
-architecture was driven by detailed empirical evaluations of
-communication primitive performance
+{\bf Communication Primitives}. The micro-kernel is an example of an
+operating system whose architecture was driven by detailed empirical
+evaluations of communication primitive performance
 \cite{gefflaut-sawmill,liedtke-improve-ipc,liedtke-microkernels}.
 Since interprocess communication (IPC) was often the limiting factor
 in micro-kernel performance, developers designed numerous benchmarks
@@ -1903,105 +1916,105 @@ that improve the performance of intra-node communication
 efforts, this paper considers the evaluation of primitives that are
 already in wide use, namely Java sockets and XML-RPC.
 
-\subsection{Sockets and XML-RPC}
-\label{sec:sockets-xml-rpc}
+%% \subsection{Sockets and XML-RPC}
+%% \label{sec:sockets-xml-rpc}
 
 %% (iii) measurement and modeling of computer program performance, and
 
 %% Since Allman's experiments were performed, a new GNU/Linux kernel,
 %% JVM, and XML-RPC implementation have been released.
 
-In category (ii), this paper is directly related to Allman's empirical
-analysis of the socket and XML-RPC primitives \cite{allman-per}.  This
-paper is different than \cite{allman-per} because it (i) reports
-benchmark results with the recent versions of sockets and XML-RPC,
-(ii) solely focuses on experiments where the client and server reside
-on the same node, (iii) measures response time with OS and
-language-based timers, and (iv) explains the results in light of JVM
-behavior.  It is interesting to note that the results of this paper
-contrast with those found by Allman.  Previous work suggests that
-sockets and XML-RPC have similar response time characteristics for
-small transactions.  However, the experiments that use larger
-transactions show that sockets perform up to an order of magnitude
-better than XML-RPC \cite{allman-per}.  Our experiments demonstrate
-that sockets outperformed XML-RPC with smaller transactions but that
-at extremely large transaction sizes XML-RPC performed significantly
-better than sockets.  We judge that the conflicting performance
-characterizations could be attributed to the (i) different execution
-environments (e.g., kernel, OS, and JVM), (ii) different versions of
-sockets and XML-RPC, and (iii) location of the client and server JVMs.
-The future experimentation described in Section~\ref{sec:future-work}
-will support the resolution of the differences between these two
-studies.
+{\bf Sockets and XML-RPC}. In category (ii), this paper is directly
+related to Allman's empirical analysis of the socket and XML-RPC
+primitives \cite{allman-per}.  This paper is different than
+\cite{allman-per} because it (i) reports benchmark results with the
+recent versions of sockets and XML-RPC, (ii) solely focuses on
+experiments where the client and server reside on the same node, (iii)
+measures response time with OS and language-based timers, and (iv)
+explains the results in light of JVM behavior.  It is interesting to
+note that the results of this paper contrast with those found by
+Allman.  Previous work suggests that sockets and XML-RPC have similar
+response time characteristics for small transactions.  However, the
+experiments that use larger transactions show that sockets perform up
+to an order of magnitude better than XML-RPC \cite{allman-per}.  Our
+experiments demonstrate that sockets outperformed XML-RPC with smaller
+transactions but that at extremely large transaction sizes XML-RPC
+performed significantly better than sockets.  We judge that the
+conflicting performance characterizations could be attributed to the
+(i) different execution environments (e.g., kernel, OS, and JVM), (ii)
+different versions of sockets and XML-RPC, and (iii) location of the
+client and server JVMs.  The future experimentation described in
+Section~\ref{sec:future-work} will support the resolution of the
+differences between these two studies.
 
-\subsection{Performance Benchmarks}
-\label{sec:middl-benchm}
+%% \subsection{Performance Benchmarks}
+%% \label{sec:middl-benchm}
 
-In category (iii), the detailed empirical studies by Bulej et
-al.\ \cite{bulej-final}, Cecchet et al.\ \cite{cacchet-ejb-perform},
-and Pugh and Spacco \cite{pugh-rubis-revisit} indicate that the
-analysis and characterization of middleware performance is
-challenging.  Bulej et al.\ describe a new middleware benchmarking
-technique called regression benchmarking (similar to software
-regression testing
-\cite{kapfhammer-testing-handbook,rothermel-safe,rummel-kanonizo-sac2005})
-that repeatedly executes benchmarks in an attempt to identify
-performance regressions in middleware \cite{bulej-final}.
-Interestingly, Bulej et al.\ determine that certain complex benchmarks
-such as RUBiS and TPC-W are not applicable in the context of
-regression benchmarking because their execution incurs a significant
-time overhead and the results are subject to mis-interpretation
-\cite{bulej-final}.  Similar to the framework described in this paper,
-Bulej et al.\ focus on the use of simple benchmarks that test an
-isolated feature of a system.  %middleware.
+%% In category (iii), the detailed empirical studies by Bulej et
+%% al.\ \cite{bulej-final}, Cecchet et al.\ \cite{cacchet-ejb-perform},
+%% and Pugh and Spacco \cite{pugh-rubis-revisit} indicate that the
+%% analysis and characterization of middleware performance is
+%% challenging.  Bulej et al.\ describe a new middleware benchmarking
+%% technique called regression benchmarking (similar to software
+%% regression testing
+%% \cite{kapfhammer-testing-handbook,rothermel-safe,rummel-kanonizo-sac2005})
+%% that repeatedly executes benchmarks in an attempt to identify
+%% performance regressions in middleware \cite{bulej-final}.
+%% Interestingly, Bulej et al.\ determine that certain complex benchmarks
+%% such as RUBiS and TPC-W are not applicable in the context of
+%% regression benchmarking because their execution incurs a significant
+%% time overhead and the results are subject to mis-interpretation
+%% \cite{bulej-final}.  Similar to the framework described in this paper,
+%% Bulej et al.\ focus on the use of simple benchmarks that test an
+%% isolated feature of a system.  %middleware.
 
-Also in the context of category (iii), Sterck et al.\ evaluate the
-performance of a tuple space that is a component within a framework
-for performing bioinformatics computations
-\cite{sterck-taskspaces-book,sterck-taskspaces}.  While Noble and
-Zlateva primarily report on benchmark results for astrophysics
-computations, some of their micro benchmarks also produce results that
-are relevant to the use of tuple spaces in distributed systems
-\cite{noble-javaspaces}.  Like this paper, Hancke et al.\ and Neve et
-al.\ specifically focus on measuring the performance of JavaSpaces
-through statistically guided experiments
-\cite{hancke-js-overhead,neve-doe-js}.  Maassen et al.\ propose an
-alternative implementation of Java RMI and conduct a series of
-detailed experiments to evaluate the performance of RMI on a 32-node
-Myrinet cluster \cite{maasen-java-rmi}.  Finally, Halepovic and Deters
-evaluate the performance of JXTA and they observe that one limiting
-factor for JXTA throughput is the amount of control data included in a
-JXTA communication message \cite{halepovic-jxta}.  These papers are
-all related to this paper because they also focus on the performance
-evaluation of different message passing primitives for Java.
+%% Also in the context of category (iii), Sterck et al.\ evaluate the
+%% performance of a tuple space that is a component within a framework
+%% for performing bioinformatics computations
+%% \cite{sterck-taskspaces-book,sterck-taskspaces}.  While Noble and
+%% Zlateva primarily report on benchmark results for astrophysics
+%% computations, some of their micro benchmarks also produce results that
+%% are relevant to the use of tuple spaces in distributed systems
+%% \cite{noble-javaspaces}.  Like this paper, Hancke et al.\ and Neve et
+%% al.\ specifically focus on measuring the performance of JavaSpaces
+%% through statistically guided experiments
+%% \cite{hancke-js-overhead,neve-doe-js}.  Maassen et al.\ propose an
+%% alternative implementation of Java RMI and conduct a series of
+%% detailed experiments to evaluate the performance of RMI on a 32-node
+%% Myrinet cluster \cite{maasen-java-rmi}.  Finally, Halepovic and Deters
+%% evaluate the performance of JXTA and they observe that one limiting
+%% factor for JXTA throughput is the amount of control data included in a
+%% JXTA communication message \cite{halepovic-jxta}.  These papers are
+%% all related to this paper because they also focus on the performance
+%% evaluation of different message passing primitives for Java.
 
 %% remote communication primitives.
 
-\vspace*{-.1in}
+%% \vspace*{-.1in}
 
-\subsection{Java Performance Analysis}
-\label{sec:java-perf-analys}
+%% \subsection{Java Performance Analysis}
+%% \label{sec:java-perf-analys}
 
 %% In category (iii), Jain \cite{jain-art-perform} and Lilja
 %% \cite{lilja-perform} both provide excellent introductions to the art
 %% and science of computer performance analysis.  
 
-Horgan et al.'s platform-independent analysis of Java program
-performance at the bytecode level \cite{horgan-measure-runtime} is
-relevant to category (iv).  Furthermore, Zhang and Seltzer present an
-application-specific benchmarking framework that evaluates Java
-virtual machine performance in light of the behavior of a specific
-application \cite{zhang-hbenchjava}.  Dufour et al.\ propose a series
-of dynamic metrics that attempt to characterize the behavior of a Java
-application in a platform independent fashion \cite{dufour-metrics},
-while Sweeney et al.\ use hardware performance monitors to shed light
-on the performance characteristics of Java programs
-\cite{sweeney-hardware}.  Finally, Hauswirth et
-al.\ \cite{hauswirth-profile} present different techniques that can be
-used to profile and understand the behavior of Java software
-applications. Each of these examples of related work could complement
-the presented framework by expanding the types of benchmarks or
-enhancing the analysis of the empirical results.
+%% Horgan et al.'s platform-independent analysis of Java program
+%% performance at the bytecode level \cite{horgan-measure-runtime} is
+%% relevant to category (iv).  Furthermore, Zhang and Seltzer present an
+%% application-specific benchmarking framework that evaluates Java
+%% virtual machine performance in light of the behavior of a specific
+%% application \cite{zhang-hbenchjava}.  Dufour et al.\ propose a series
+%% of dynamic metrics that attempt to characterize the behavior of a Java
+%% application in a platform independent fashion \cite{dufour-metrics},
+%% while Sweeney et al.\ use hardware performance monitors to shed light
+%% on the performance characteristics of Java programs
+%% \cite{sweeney-hardware}.  Finally, Hauswirth et
+%% al.\ \cite{hauswirth-profile} present different techniques that can be
+%% used to profile and understand the behavior of Java software
+%% applications. Each of these examples of related work could complement
+%% the presented framework by expanding the types of benchmarks or
+%% enhancing the analysis of the empirical results.
 
 \begin{table}[t]
 
@@ -2034,40 +2047,11 @@ enhancing the analysis of the empirical results.
 
 \end{table}
 
-\section{Future Work}
-\label{sec:future-work}
-
-In future research, we will modify and/or re-configure the GNU/Linux
-kernel and the packet capture tools in order to more accurately
-characterize network resource consumption.  We will also improve the
-presented work by introducing multi-threaded clients and measuring
-benchmark throughput.  It would also be useful to perform these same
-benchmarks on different architectures and platforms in order to
-determine how the execution environment impacts the performance
-results.  Furthermore, we will measure message passing performance
-when the client and server exist on separate machines.  When
-communication occurs between non-local JVMs, it is also important to
-study the performance of the primitives on congested and/or unreliable
-networks.
-
-We intend to execute long running benchmark campaigns that invoke a
-series of methods on the side of the server while continuing to
-collect JVM behavior profiles.  This will enable us to identify the
-impact that HotSpot\texttrademark adaptive optimization has on the
-performance of the communication mechanisms.  Additional research will
-also investigate alternatives to socket and XML-RPC communication such
-as Java-MPI \cite{getov-mpi,judd-mpi-java}, Java RMI
-\cite{grosso-rmi,maasen-java-rmi}, tuple spaces
-\cite{arnold-javaspace-rdb,fiedler-per,wells-linda-java-journal}, and
-JXTA \cite{oaks-jxta,seigneur-jxta}.  These alternatives will be
-compared to sockets and XML-RPC in order to determine how each
-communication method compares to the others in terms of response time,
-network resource consumption, and JVM behavior. Finally, we will
-examine the impact that XML compression algorithms (e.g.,
-\cite{min-xpress}) have on the message passing performance of XML-RPC.
+%% \section{Future Work}
+%% \label{sec:future-work}
 
 %\vspace*{-.1in}
-\section{Conclusions}
+\section{Conclusions and Future Work}
 \label{sec:conclusions}
 
 This paper describes a benchmarking framework that supports the
@@ -2101,6 +2085,35 @@ extend our framework with new benchmarks and statistical analysis
 techniques, we judge that future research can continue to develop a
 deeper understanding of Java's communication primitives by using these
 benchmarks.
+
+In future research, we will modify and/or re-configure the GNU/Linux
+kernel and the packet capture tools in order to more accurately
+characterize network resource consumption.  We will also improve the
+presented work by introducing multi-threaded clients and measuring
+benchmark throughput.  It would also be useful to perform these same
+benchmarks on different architectures and platforms in order to
+determine how the execution environment impacts the performance
+results.  Furthermore, we will measure message passing performance
+when the client and server exist on separate machines.  When
+communication occurs between non-local JVMs, it is also important to
+study the performance of the primitives on congested and/or unreliable
+networks.
+
+We intend to execute long running benchmark campaigns that invoke a
+series of methods on the side of the server while continuing to
+collect JVM behavior profiles.  This will enable us to identify the
+impact that HotSpot\texttrademark adaptive optimization has on the
+performance of the communication mechanisms.  Additional research will
+also investigate alternatives to socket and XML-RPC communication such
+as Java-MPI \cite{getov-mpi,judd-mpi-java}, Java RMI
+\cite{grosso-rmi,maasen-java-rmi}, tuple spaces
+\cite{arnold-javaspace-rdb,fiedler-per,wells-linda-java-journal}, and
+JXTA \cite{oaks-jxta,seigneur-jxta}.  These alternatives will be
+compared to sockets and XML-RPC in order to determine how each
+communication method compares to the others in terms of response time,
+network resource consumption, and JVM behavior. Finally, we will
+examine the impact that XML compression algorithms (e.g.,
+\cite{min-xpress}) have on the message passing performance of XML-RPC.
 
 %% use these
 %% benchmarks to 
