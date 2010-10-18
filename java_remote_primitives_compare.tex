@@ -342,19 +342,20 @@ these primitives respectively represent (i) a low-level and a
 high-level remote communication mechanism and (ii) a well established
 standard and a recently proposed popular alternative.\footnote{{\small
     Since the benchmarking framework supports the integration of other
-    RCPs, Section~\ref{sec:future-work} notes that we intend to
-    incorporate and evaluate other communication primitives in future
-    work.}} While sockets typically support high performance message
-passing \cite{allman-per}, they may require a programmer to understand
-several low-level implementation details.  Alternatively, XML-RPC
-furnishes a high-level communication paradigm that enables programming
-language independence and the rapid implementation of a program while
-potentially compromising performance \cite{allman-per}.  Even though
-the {\tt java.net} package provides a refined implementation of
-sockets, XML can still be directly integrated into the Java
-programming language \cite{harren-xj}.  Furthermore, XML-RPC libraries
-are available for Java and systems such as OpenDHT use this protocol
-to facilitate client communication \cite{rhea-opendht}.
+    RCPs, Section~\ref{sec:conclusions} notes that we intend to
+  incorporate and evaluate other communication primitives in future
+  work.}} While sockets typically support high performance message
+  passing \cite{allman-per}, they may require a programmer to
+  understand several low-level implementation details.  Alternatively,
+  XML-RPC furnishes a high-level communication paradigm that enables
+  programming language independence and the rapid implementation of a
+  program while potentially compromising performance
+  \cite{allman-per}.  Even though the {\tt java.net} package provides
+  a refined implementation of sockets, XML can still be directly
+  integrated into the Java programming language \cite{harren-xj}.
+  Furthermore, XML-RPC libraries are available for Java and systems
+  such as OpenDHT use this protocol to facilitate client communication
+  \cite{rhea-opendht}.
 
 The {\tt java.net.Socket} class provides an endpoint for communication
 between two JVMs.  The {\tt bind} operation attaches a socket to a
@@ -774,9 +775,9 @@ network consumption since it assumes that all packets that were
 received, but not captured and analyzed, are of the average size of
 those packets $\upphi \in \Phi_c$.  While the use of $W(B,P, \Phi_c,
 \Phi_r)$ is a reasonable first step towards approximating network
-consumption, Section~\ref{sec:future-work} suggests ways to avoid this
-estimation of network resource consumption and thus improve future
-empirical studies of Java's remote communication primitives.
+consumption, Section~\ref{sec:conclusions} suggests ways to avoid
+  this estimation of network resource consumption and thus improve
+  future empirical studies of Java's remote communication primitives.
 \end{sloppypar}
 
 \vspace*{-.1in}
@@ -937,11 +938,11 @@ confidence intervals that we calculated.
 
 %\begin{sloppypar}
 
-We apply these additional statistical analyses under the assumptions
+We apply these additional statistical analyses with the observation
 that (i) the response times adhere to an interval measurement scale,
 (ii) the $N$ samples within $\mathcal{R}$ are independent, and (iii)
 the variances of the response times for the two different
-communication primitives are not equal.  Assumption (i) is justified
+communication primitives are not equal.  Observation (i) is justified
 because the difference between two response time measurements is
 meaningful. That is, if response time is measured in seconds and we
 have $R_1(B,P) = .15$ and $R_2(B,P) = .10$, then we can accurately say
@@ -950,10 +951,10 @@ that $R_1$ is .05 seconds slower than $R_2$.  We judge that assumption
 pauses between each execution trial of a benchmark (we set the pause
 to five seconds for all of the empirical results in
 Section~\ref{sec:results}, although this time period is a configurable
-parameter of the framework).  Since the results also demonstrate that
-the variances were not always exactly equal, as stated in assumption
-(iii), we employ the Welch's approximate t-test rather than the
-traditional t-test.
+parameter of the framework).  Since the response time results also
+demonstrate that the variances were not always exactly equal, as
+stated in assumption (iii), we employ the Welch's approximate t-test
+rather than the traditional t-test.
 
 % that assumes equal variances.
 
@@ -1005,7 +1006,7 @@ repeatable and predictable manner.
 \vspace*{-.1in}
 \caption{Micro Benchmarks Using the (a) Operating System-Based and (b)
 Language-Based Timers.}\label{fig:realworlds}
-\vspace*{-.1in}
+\vspace*{-.05in}
 \end{figure*}
 
 %% For given class of benchmarks and timers (e.g., the micro benchmarks
@@ -1149,9 +1150,9 @@ intervals of [0.17,0.17] and [1.902,2.039], respectively.  While
 Table~\ref{tab:XMLResults} indicates that the confidence intervals for
 {\tt GRAB}'s response times do overlap, the t-test still rejects the
 null hypothesis and thus we judge that the primitives have different
-time overheads.  In this case, the t-test rejects $H_0$ because socket
-implementation of {\tt GRAB} exhibits no variability in the response
-time metric.
+time overheads.  In this case, the t-test rejects $H_0$ because the
+socket implementation of {\tt GRAB} exhibits no variability in the
+response time metric.
 
 %% For all benchmarks $B$, {\small $R_\Delta^\%(B,S,X)$}$=212\%$ on
 %% average and there is no overlap in the standard deviation when a
@@ -1225,6 +1226,11 @@ less variable than XML-RPC's.
 
 %% For the {\tt SV} benchmark, we conclude that sockets are
 
+%% Yet, the results in Figure~\ref{fig:varying}(a) also reveal that
+%% {\small $R_\Delta^\%(\mbox{{\tt SV}},S_{500},X_{500})$}$=141.60\%$ and
+%% thus sockets still exhibit lower and less dispersed response times
+%% than XML-RPC.
+
 Since real world Java applications that perform intra-node
 communication may transmit vectors of different sizes, we conducted
 additional experiments to determine how the variation of vector size
@@ -1236,10 +1242,12 @@ $size(V)$ with \texttt{SV}. The experiments indicate that {\small
   $R_\Delta^\%(\mbox{{\tt
       SV}},X_5,X_{500})$}$=53.39\%$.\footnote{{\small In the remainder
     of this paper the notation $P_k$ denotes the use of communication
-    primitive $P$ to transmit a vector with $k$ entries.}}  The very
-low response time associated with socket-based communication when
+    primitive $P$ to transmit a vector with $k$ entries.  For
+    instance, $S_{500}$ means that the socket primitive transmitted a
+    vector $V$ of 500 values (i.e., $size(V)=500$).}}  The very low
+response time associated with socket-based communication when
 $size(V)=5$ causes the large percent increase when $S_{500}$ is
-executed instead of $S_{5}$.  Yet, the results in
+executed instead of $S_{5}$.  Yet, calculations with the results in
 Figure~\ref{fig:varying}(a) also reveal that {\small
   $R_\Delta^\%(\mbox{{\tt SV}},S_{500},X_{500})$}$=141.60\%$ and thus
 sockets still exhibit lower and less dispersed response times than
@@ -1255,21 +1263,21 @@ of $size(V)$ is less than or equal to 500.
 \centering
 \begin{tabular}{c c c}
 
-\begin{minipage}{2.0in}
+\begin{minipage}{2.1in}
 \centering
 \epsfig{file=sl_chart.eps}
 \vspace*{-.2in}
 \begin{center}\hspace{.6in}(a)\end{center}
 \end{minipage} &
 
-\begin{minipage}{2.0in}
+\begin{minipage}{2.1in}
 \centering
 \epsfig{file=ls_chart.eps}
 \vspace*{-.2in}
 \begin{center}\hspace{.6in}(b)\end{center}
 \end{minipage} &
 
-\begin{minipage}{2.0in}
+\begin{minipage}{2.1in}
 \centering
 \epsfig{file=ll_chart.eps}
 \vspace*{-.2in}
