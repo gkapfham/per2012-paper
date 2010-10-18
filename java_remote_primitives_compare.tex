@@ -1006,7 +1006,7 @@ repeatable and predictable manner.
 \vspace*{-.1in}
 \caption{Micro Benchmarks Using the (a) Operating System-Based and (b)
 Language-Based Timers.}\label{fig:realworlds}
-\vspace*{-.05in}
+\vspace*{-.1in}
 \end{figure*}
 
 %% For given class of benchmarks and timers (e.g., the micro benchmarks
@@ -1231,7 +1231,7 @@ less variable than XML-RPC's.
 %% thus sockets still exhibit lower and less dispersed response times
 %% than XML-RPC.
 
-Since real world Java applications that perform intra-node
+Since real-world Java applications that perform intra-node
 communication may transmit vectors of different sizes, we conducted
 additional experiments to determine how the variation of vector size
 impacted response time.  Table~\ref{tab:sizes} gives the different
@@ -1439,7 +1439,9 @@ parameters {\tt CON}, {\tt LAT}, and {\tt BAN} respectively indicate
 the relative importance of short connection time, low latency, and
 high bandwidth.  Yet, response times did not differ when we called
 {\tt setPerformancePreferences(0,1,0)} in order to favor low latency
-over connection time and bandwidth.
+over connection time and bandwidth.  This exploration strengthens the
+conclusion that sockets are truly slower than XML-RPC when
+transferring bulk data.
 
 %% A cumulative distribution function (CDF) give the probability than a
 %% random variable X is less that a given value x. (F(x) = Pr{X<=x}). An
@@ -1462,7 +1464,7 @@ over connection time and bandwidth.
 
   \vspace*{.1in}
 
-  \fbox{All Response Times Calculated by the Java Timers}
+  \fbox{{\small All Response Times Calculated by the Java Timers}}
 
   \end{center} %}
 
@@ -1522,9 +1524,9 @@ known as permanent, old, and young.  The young space is further
 sub-divided into three regions known as eden, survivor one (S1), and
 survivor two (S2).  We record the number of times the collector
 performs a full collection over all three regions and a young
-collection for eden, S1, and S2.  It is important to note that the
-young GC (YGC) events often occur more frequently than the full GC
-(FGC) events even though a full GC consumes more time overhead.
+collection for eden, S1, and S2.  While young GC (YGC) events often
+occur more frequently than the full GC (FGC) events, a full GC
+normally takes longer.
 
 %% This paper also reports the GC object ratio for a benchmark as the
 %% number of allocated objects divided by the number of live objects at
@@ -1597,36 +1599,52 @@ Java's ``new input/output'' (NIO) package.
 \begin{table*}[t]
 
 \begin{center}
-\begin{tabular}{|c||c|c|}
+\begin{tabular}{cccc|c|}
+
+\cline{4-5}
+
+\begin{minipage}{1in}\rule{-.1in}{14pt}\end{minipage}  &                      &                      & \multicolumn{2}{|c|}{{\bf Instrumentation}} \\
+\hline
+\multicolumn{1}{|c||}{{\bf Comparison}} & \multicolumn{1}{|c|}{{\bf CI for Sockets}} & \multicolumn{1}{|c|}{{\bf CI for XML-RPC}} & {\bf Language} & {\bf System} \\
+\hline
+
+ \multicolumn{1}{|c||}{$R(\mbox{\texttt{SS}},S_{5})$ vs $ R(\mbox{\texttt{SS}},X_{5})$}  & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[0.269, 0.293]} & & $\checkmark$ \\
 
 \hline
- {\bf Comparison}     & {\bf CI for Sockets} & {\bf CI for XML-RPC} \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$}  & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[0.252, 0.328]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{SS}},S_{5})$ vs $ R(\mbox{\texttt{SS}},X_{5})$  & [0.17, 0.17]   & [0.269, 0.293] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$} & \multicolumn{1}{|c|}{[0.023, 0.025]} & \multicolumn{1}{|c|}{[0.072, 0.107]} & & $\checkmark$ \\
+
 \hline
- $R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$   & [0.17, 0.17]   & [0.252, 0.328] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$} & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[1.902, 2.039]} & & $\checkmark$ \\
+
 \hline
- $R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$  & [0.023, 0.025]   & [0.072, 0.107] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{GRAB}},S_{5})$ vs $R(\mbox{\texttt{GRAB}},X_{5})$} & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[0.159, 0.191]} & & $\checkmark$ \\
+
 \hline
- $R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$  & [0.17, 0.17]   & [1.902, 2.039] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{GCD}},S_{5})$ vs $R(\mbox{\texttt{GCD}},X_{5})$} & \multicolumn{1}{|c|}{[0.002, 0.003]} & \multicolumn{1}{|c|}{[0.067, 0.104]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{GRAB}},S_{5})$ vs $R(\mbox{\texttt{GRAB}},X_{5})$ & [0.17, 0.17]   & [0.159, 0.191] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$} & \multicolumn{1}{|c|}{[0.002, 0.004]} & \multicolumn{1}{|c|}{[1.687, 1.834]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{GCD}},S_{5})$ vs $R(\mbox{\texttt{GCD}},X_{5})$  & [0.002, 0.003]   & [0.067, 0.104] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{SV}},S_{500})$ vs $R(\mbox{\texttt{SV}},X_{500})$}& \multicolumn{1}{|c|}{[0.050, 0.058]} & \multicolumn{1}{|c|}{[0.106, 0.156]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$& [0.002, 0.004]   & [1.687, 1.834] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VS}},S_{500})$ vs $R(\mbox{\texttt{VS}},X_{500})$} & \multicolumn{1}{|c|}{[0.019, 0.042]} & \multicolumn{1}{|c|}{[0.089, 0.148]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{SV}},S_{500})$ vs $R(\mbox{\texttt{SV}},X_{500})$& [0.050, 0.058]   & [0.106, 0.156] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{500})$ vs $R(\mbox{\texttt{VV}},X_{500})$} & \multicolumn{1}{|c|}{[0.090, 0.119]} & \multicolumn{1}{|c|}{[0.128, 0.201]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{VS}},S_{500})$ vs $R(\mbox{\texttt{VS}},X_{500})$& [0.019, 0.042]   & [0.089, 0.148] \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5000})$ vs $R(\mbox{\texttt{VV}},X_{5000})$} & \multicolumn{1}{|c|}{[0.292, 0.304]} & \multicolumn{1}{|c|}{[0.292, 0.401]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{VV}},S_{500})$ vs $R(\mbox{\texttt{VV}},X_{500})$ & [0.090, 0.119]   & [0.128, 0.201] \\
+\multicolumn{1}{|c||}{$ R(\mbox{\texttt{VV}},S_{10000})$ vs $ R(\mbox{\texttt{VV}},X_{10000})$} & \multicolumn{1}{|c|}{[0.588, 0.608]} & \multicolumn{1}{|c|}{[0.469, 0.577]} & $\checkmark$ & \\
+
 \hline
- $R(\mbox{\texttt{VV}},S_{5000})$ vs $R(\mbox{\texttt{VV}},X_{5000})$   & [0.292, 0.304] & [0.292, 0.401] \\
-\hline
- $ R(\mbox{\texttt{VV}},S_{10000})$ vs $ R(\mbox{\texttt{VV}},X_{10000})$   & [0.588, 0.608] & [0.469, 0.577] \\
-\hline
- $ R(\mbox{\texttt{VV}},S_{50000})$ vs $ R(\mbox{\texttt{VV}},X_{50000})$  & [18.078, 19.490]  & [1.616, 1.777] \\
+\multicolumn{1}{|c||}{$ R(\mbox{\texttt{VV}},S_{50000})$ vs $ R(\mbox{\texttt{VV}},X_{50000})$} & \multicolumn{1}{|c|}{[18.078, 19.490]} & \multicolumn{1}{|c|}{[1.616, 1.777]} & $\checkmark$ & \\
 
 \hline
 \end{tabular}
@@ -1889,11 +1907,15 @@ GNU/Linux kernel and/or enhancing existing packet capture tools.
 \section{Related Work}
 \label{sec:related-work}
 
-The research described in this paper is connected to prior work in the
-areas of the (i) implementation of communication primitives, (ii)
-benchmarking of sockets and XML-RPC, (iii) benchmarking and behavior
-characterization of message passing middleware, and (iv) performance
-analysis of software applications implemented in Java.
+This focus of this paper connects to prior work in the areas of the
+implementation of remote communication primitives and the benchmarking
+of sockets and XML-RPC.
+
+% NOTE: I am removing these for now, given the comments from the reviewer.
+
+%% (iii) benchmarking and behavior
+%% characterization of message passing middleware, and (iv) performance
+%% analysis of software applications implemented in Java.
 
 % NOTE: consider adding this in depending upon length!
 
@@ -1952,7 +1974,7 @@ conflicting performance characterizations could be attributed to the
 (i) different execution environments (e.g., kernel, OS, and JVM), (ii)
 different versions of sockets and XML-RPC, and (iii) location of the
 client and server JVMs.  The future experimentation described in
-Section~\ref{sec:future-work} will support the resolution of the
+Section~\ref{sec:conclusions} will support the resolution of the
 differences between these two studies.
 
 %% \subsection{Performance Benchmarks}
@@ -2115,8 +2137,8 @@ performance of the communication mechanisms.  Additional research will
 also investigate alternatives to socket and XML-RPC communication such
 as Java-MPI \cite{getov-mpi,judd-mpi-java}, Java RMI
 \cite{grosso-rmi,maasen-java-rmi}, tuple spaces
-\cite{arnold-javaspace-rdb,fiedler-per,wells-linda-java-journal}, and
-JXTA \cite{oaks-jxta,seigneur-jxta}.  These alternatives will be
+\cite{arnold-javaspace-rdb,fiedler-settle-sigmetrics-per,wells-linda-java-journal},
+and JXTA \cite{oaks-jxta,seigneur-jxta}.  These alternatives will be
 compared to sockets and XML-RPC in order to determine how each
 communication method compares to the others in terms of response time,
 network resource consumption, and JVM behavior. Finally, we will
