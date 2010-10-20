@@ -273,8 +273,9 @@ contributions of this paper include: \vspace*{-.1in}
   system and Java language timers.
 
 \item The integration of the HotSpot\texttrademark Java virtual
-  machine monitoring and measurement infrastructure so that response
-  time can be explained in light of memory subsystem behavior.
+  machine monitoring and measurement infrastructure
+  \cite{armstrong-hotspot} so that response time can be explained in
+  light of memory subsystem behavior.
 
 \item The use of standard network packet capture tools to measure the
   consumption of network resources.
@@ -946,14 +947,14 @@ communication primitives are not equal.  Observation (i) is justified
 because the difference between two response time measurements is
 meaningful. That is, if response time is measured in seconds and we
 have $R_1(B,P) = .15$ and $R_2(B,P) = .10$, then we can accurately say
-that $R_1$ is .05 seconds slower than $R_2$.  We judge that assumption
-(ii) is valid because {\em ExperimentCampaign} includes configurable
-pauses between each execution trial of a benchmark (we set the pause
-to five seconds for all of the empirical results in
+that $R_1$ is .05 seconds slower than $R_2$.  We judge that
+observation (ii) is valid because {\em ExperimentCampaign} includes
+configurable pauses between each execution trial of a benchmark (we
+set the pause to five seconds for all of the empirical results in
 Section~\ref{sec:results}, although this time period is a configurable
 parameter of the framework).  Since the response time results also
 demonstrate that the variances were not always exactly equal, as
-stated in assumption (iii), we employ the Welch's approximate t-test
+stated in observation (iii), we employ the Welch's approximate t-test
 rather than the traditional t-test.
 
 % that assumes equal variances.
@@ -1241,12 +1242,12 @@ $size(V)$ with \texttt{SV}. The experiments indicate that {\small
   $R_\Delta^\%(\mbox{{\tt SV}},S_5,S_{500})$}$=4069.00\%$ and {\small
   $R_\Delta^\%(\mbox{{\tt
       SV}},X_5,X_{500})$}$=53.39\%$.\footnote{{\small In the remainder
-    of this paper the notation $P_k$ denotes the use of communication
-    primitive $P$ to transmit a vector with $k$ entries.  For
-    instance, $S_{500}$ means that the socket primitive transmitted a
-    vector $V$ of 500 values (i.e., $size(V)=500$).}}  The very low
-response time associated with socket-based communication when
-$size(V)=5$ causes the large percent increase when $S_{500}$ is
+    of this paper the notation $P_k$ denotes the use of remote
+    communication primitive $P$ to transmit a vector with $k$ entries.
+    For instance, $S_{500}$ means that the socket primitive
+    transmitted a vector $V$ of 500 values (i.e., $size(V)=500$).}}
+The very low response time associated with socket-based communication
+when $size(V)=5$ causes the large percent increase when $S_{500}$ is
 executed instead of $S_{5}$.  Yet, calculations with the results in
 Figure~\ref{fig:varying}(a) also reveal that {\small
   $R_\Delta^\%(\mbox{{\tt SV}},S_{500},X_{500})$}$=141.60\%$ and thus
@@ -1464,7 +1465,7 @@ transferring bulk data.
 
   \vspace*{.1in}
 
-  \fbox{{\small All Response Times Calculated by the Java Timers}}
+  \fbox{{\small All Response Times Calculated by the Language-Based Timers}}
 
   \end{center} %}
 
@@ -1528,6 +1529,84 @@ collection for eden, S1, and S2.  While young GC (YGC) events often
 occur more frequently than the full GC (FGC) events, a full GC
 normally takes longer.
 
+\begin{figure}[t]
+\centering
+\epsfig{file=ecdf.eps}
+\vspace*{-.1in}
+\caption{Response Time for {\tt VV} when $size(V)=5000$.}
+\label{fig:ecdf}
+\vspace*{-.1in}
+\end{figure}
+
+%% CLIENT
+
+ %% if(MyClient !=null){
+ %%            try{
+ %%                //make an output stream for the socket                          
+ %%                output = new DataOutputStream(MyClient.getOutputStream());
+ %%                output.writeChars(param.toString()+"\n");
+ %%            }
+ %%            //error handle                                                      
+ %%            catch(IOException e){
+ %%                System.out.println(e);
+ %%            }
+ %%        }
+ %%        try{
+ %%            //get an input stream from the socket                               
+ %%            input = new DataInputStream(MyClient.getInputStream());
+ %%            response=input.readLine();
+
+%% SERVER
+
+  %% while(true){
+  %%           try{
+  %%               //open socket to listen for requests                            
+  %%               serviceSocket = MyService.accept();
+  %%               //get an input stream from the socket                           
+  %%               input = new DataInputStream(serviceSocket.getInputStream());
+  %%               in = input.readLine();
+  %%               System.out.println("Received: " + in);
+
+  %%           }
+
+            %% if(in!=null){
+            %%     try{
+            %%         //make an output stream for the socket                      
+            %%         output = new
+            %%             DataOutputStream(serviceSocket.getOutputStream());
+            %%         Integer temp = parser(in);
+            %%         output.writeChars((Factors(temp).toString())+"\n");
+	    %%     }
+            %%     catch (IOException e){
+            %%         System.out.println(e);
+            %%         e.printStackTrace();
+
+% NOTE: adding an additional paragraph that explains something about the
+% implementation of the socket and XML-RPC benchmark implementations
+
+%% associated with the socket connecting the
+%% client and the server.
+
+An intuitive explanation of how we implemented the socket and XML-RPC
+benchmarks aids in understanding the meaning of the behavior profiles.
+During the transfer of parameters and return values, a socket
+benchmark uses the {\tt writeChars} method of the {\tt
+  java.io.DataOutputStream} and the {\tt readLine} operation from {\tt
+  java.io.DataInputStream}.  While a socket client calls {\tt
+  writeChars} to send data to a server and {\tt readLine} to receive
+the server's return value, the server uses {\tt readLine} to get the
+parameters and {\tt writeChars} to transfer the return value.  Before
+transmission, an XML-RPC client encodes the Java object parameters in
+the character-based XML format, whereas the server must decode the XML
+message in order to transform the text back into objects.  The XML-RPC
+server and client reverse this procedure to respectively handle the
+encoding and decoding on the return value.  Overall, both of the
+benchmarks process characters and strings since they use a textual
+representation for the parameters and return values.  The frequent
+conversion between Java objects and text and the use of strings and
+characters often cause the benchmarks to inefficiently allocate many
+data values to the heap \cite{kawachiya-string-ineff}.
+
 %% This paper also reports the GC object ratio for a benchmark as the
 %% number of allocated objects divided by the number of live objects at
 %% the point of server termination (the GC byte ratio can be calculated
@@ -1541,10 +1620,10 @@ Figure~\ref{fig:realworlds} shows that the {\tt REV} benchmark takes
 longer to complete when it uses XML-RPC instead of the socket
 primitive.  This is due in part to the fact that the socket primitive
 does not cause any YGC or FGC events to occur.  The XML-RPC primitive
-forces 122 YGC events that consume .059 seconds and 5 FGC events that
-increase response time by .123 seconds.  The XML-RPC server must also
-perform additional string processing in order to reverse the input
-vector and this increases the response time as well.
+forces 122 YGC events that consume a total of .059 seconds and 5 FGC
+events that increase response time by .123 seconds.  Yet, the XML-RPC
+server must also perform additional string processing in order to
+reverse the input vector and this increases the response time as well.
 Table~\ref{tab:increasebig} shows that the execution of {\tt VV} can
 yield very high response times for sockets.  Table~\ref{tab:allgc}
 reveals that sockets and XML-RPC have similar GC behavior when
@@ -1553,15 +1632,6 @@ X-{\tt VV} both avoid a full garbage collection when 5000 objects are
 transmitted.  Even though sockets do require more GC activity when
 $size(V)=10000$, the YGC and FGC events only increase response time by
 .073 seconds.
-
-\begin{figure}[t]
-\centering
-\epsfig{file=ecdf.eps}
-\vspace*{-.1in}
-\caption{Response Time for {\tt VV} when $size(V)=5000$.}
-\label{fig:ecdf}
-\vspace*{-.1in}
-\end{figure}
 
 %% Table~\ref{tab:allocate} shows that the XML-RPC primitive has a higher
 %% GC object ratio than sockets and this suggests that the XML-RPC server
@@ -1577,9 +1647,9 @@ $size(V)=10000$, the YGC and FGC events only increase response time by
 Table~\ref{tab:allgc}(a) indicates that S-{\tt VV}'s JVM performs 1645
 YGC and 663 FGC events when $size(V)=50000$, while X-{\tt VV} only
 causes 123 YGC and 5 FGC events.  The 10.375 seconds associated with
-performing the full GC events represent $55\%$ of the execution time
+performing the full GC events represent $55.23\%$ of the execution time
 for S-{\tt VV}.  In contrast, the FGC events performed by the X-{\tt
-  VV} JVM correspond to $2.9\%$ of the benchmark's total execution
+  VV} JVM correspond to $8.43\%$ of the benchmark's total execution
 time.  The use of the JVM heap profiling agent called {\tt hprof}
 reports that the S-{\tt VV} JVM allocates $152,539$ objects to the
 heap while $1,506,476$ objects are allocated by the X-{\tt VV} JVM.
@@ -1611,10 +1681,10 @@ Java's ``new input/output'' (NIO) package.
  \multicolumn{1}{|c||}{$R(\mbox{\texttt{SS}},S_{5})$ vs $ R(\mbox{\texttt{SS}},X_{5})$}  & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[0.269, 0.293]} & & $\checkmark$ \\
 
 \hline
-\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$}  & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[0.252, 0.328]} & $\checkmark$ & \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$}  & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[0.252, 0.328]} & & $\checkmark$ \\
 
 \hline
-\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$} & \multicolumn{1}{|c|}{[0.023, 0.025]} & \multicolumn{1}{|c|}{[0.072, 0.107]} & & $\checkmark$ \\
+\multicolumn{1}{|c||}{$R(\mbox{\texttt{VV}},S_{5})$ vs $R(\mbox{\texttt{VV}},X_{5})$} & \multicolumn{1}{|c|}{[0.023, 0.025]} & \multicolumn{1}{|c|}{[0.072, 0.107]} & $\checkmark$ & \\
 
 \hline
 \multicolumn{1}{|c||}{$R(\mbox{\texttt{REV}},S_{5})$ vs $R(\mbox{\texttt{REV}},X_{5})$} & \multicolumn{1}{|c|}{[0.17, 0.17]} & \multicolumn{1}{|c|}{[1.902, 2.039]} & & $\checkmark$ \\
@@ -1690,27 +1760,42 @@ bytes for the XML-RPC communication mechanism.
 %% 180*861.67
 %% 155100.60
 
-An estimate of the total network resource consumption in bytes can be
-made by multiplying the average size by the total number of packets
-received by the kernel filter.  This estimate is not entirely accurate
-since the average packet size is computed by sizing the packets that
-were captured and stored for later analysis.  Further analysis shows
-that {\small $W_\Delta^\%(\mbox{{\tt SS}},S,X)=$}31\%, {\small
-  $W_\Delta^\%({\tt SV},S,X)=$}119\%, {\small $W_\Delta^\%(\mbox{{\tt
-      VS}},S,X)=$}$-69\%$, and {\small $W_\Delta^\%(\mbox{{\tt
-      VV}},S,X) =$}$-45\%$.  These percent increases suggest that
-socket communication consumes fewer network resources than XML-RPC for
-the \texttt{SS} and \texttt{SV} benchmarks.  As given in
-Table~\ref{tab:sover}, the \texttt{VS} and \texttt{VV} benchmarks
-reveal that socket communication transmits more data than XML-RPC.
-For instance, we estimate that S-{\tt VS} transmits a total of 285,209
-bytes whereas X-{\tt VS} only transfers 155,100 bytes during
-execution.  This results suggests that, at the packet level, XML-RPC's
-textual encoding of vectors can be more space efficient than the Java
-serialization mechanism used by sockets.  However, since XML-RPC
-frequently causes the transmission of very large packets (e.g., X-{\tt
-  VV} has an average packet size of 1455.9 bytes), this primitive
-might not be suitable for interactive Java applications.
+%% An estimate of the total network resource consumption in bytes can be
+%% made by multiplying the average size by the total number of packets
+%% received by the kernel filter.  This estimate is not entirely accurate
+%% since the average packet size is computed by sizing the packets that
+%% were captured and stored for later analysis.
+
+%% Further analysis shows
+
+%% S-VS
+
+%% 13944*71.16
+%% 992255.04
+
+%% X-VS
+
+%% 360*861.67
+%% 310201.20
+
+Using the approach and equations in Section~\ref{sec:evmet}, we
+calculated that {\small $W_\Delta^\%(\mbox{{\tt SS}},S,X)=$}30.90\%,
+{\small $W_\Delta^\%({\tt SV},S,X)=$}118.86\%, {\small
+  $W_\Delta^\%(\mbox{{\tt VS}},S,X)=$}$-68.73\%$, and {\small
+  $W_\Delta^\%(\mbox{{\tt VV}},S,X) =$}$-44.71\%$.  These percent
+increases suggest that socket communication consumes fewer network
+resources than XML-RPC for the \texttt{SS} and \texttt{SV} benchmarks.
+As given in Table~\ref{tab:sover}, the results with \texttt{VS} and
+\texttt{VV} reveal that socket communication transmits more data than
+XML-RPC.  For instance, we estimate that S-{\tt VS} transmits a total
+of $13944 \times 71.16 = 992,255.04$ bytes whereas X-{\tt VS} only
+transfers $360 \times 861.67 = 310,201.20$ bytes during execution.
+This results suggests that, at the packet level, XML-RPC's textual
+encoding of vectors can be more space efficient than the Java
+serialization mechanism used by sockets.  However, the XML-RPC
+primitive might not be suitable for interactive Java applications
+because it frequently causes the transmission of very large packets
+(e.g., X-{\tt VV} has an average packet size of 1455.90 bytes).
 
 %% Table~\ref{tab:sover} shows the results of space overhead for the
 %% micro benchmarks with $size(V) = 500$.  The most obvious trend to note
@@ -1765,7 +1850,7 @@ in their correctness and we judge that they did not negatively impact
 the validity of our empirical study.  Moreover, Allman also leveraged
 tools such as {\tt tcpdump} without noticing problems that would
 compromise the results \cite{allman-per}.  We also tested each
-benchmark in isolation in order to ensure that it repeatedly produced
+benchmark in isolation in order to ensure that it regularly produced
 meaningful outcomes.  Finally, we controlled threats to internal
 validity by using the same workstation and preventing external user
 logins throughout experimentation.
@@ -2052,7 +2137,9 @@ differences between these two studies.
   \begin{center}
   \begin{tabular}{| c | c | c | c |}
   \hline
-  Benchmark & Received & Captured &  Avg Size (bytes)\\
+  Benchmark & \begin{minipage}{.5in}\vspace*{4pt} \begin{center}Packets\\ Received\end{center} \end{minipage} & 
+  \begin{minipage}{.5in} \vspace*{4pt} \begin{center} Packets \\ Captured \end{center} \end{minipage} & 
+  \begin{minipage}{.75in} \vspace*{4pt} \begin{center} Avg Packet \\ Size (bytes)\end{center} \end{minipage} \\[.15in]
   \hline
   S-\texttt{SS} & 402 & 201 & 74.06\\
   X-\texttt{SS} & 360 & 180 & 108.28\\
@@ -2064,12 +2151,18 @@ differences between these two studies.
   X-\texttt{VS} & 360 & 180 & 861.67\\
   \hline
   S-\texttt{VV} & 13362 & 4044 & 78.83\\
-  X-\texttt{VV} & 400 & 200 & 1455.9\\
+  X-\texttt{VV} & 400 & 200 & 1455.90\\
   \hline
   \end{tabular}
 \end{center}
 
 \vspace*{-.1in}
+
+\begin{center}
+  \fbox{All Benchmarks Use a Vector with 500 Values}
+\end{center}
+
+\vspace*{-.15in}
 
   \caption{Network Resource Consumption.}
   \label{tab:sover}
