@@ -1085,7 +1085,7 @@ Table~\ref{tab:XMLResults}, the socket implementation of \texttt{SS}
 had a confidence interval of [0.17,0.17], while the interval for
 XML-RPC's response times was [0.269,0.293].  These results are
 significant because the confidence intervals do not overlap and the
-result of the t-test was to reject the null hypothesis.  Finally, the
+result of the t-test was to reject the null hypothesis.  Lastly, the
 summary information in Table~\ref{tab:XMLResults} also demonstrates
 that sockets and XML-RPC have statistically different response times
 for the \texttt{VV} benchmark.
@@ -1106,7 +1106,7 @@ sockets and 0.089025 seconds for XML-RPC.  We also observe that
 {\small $R_\Delta^\%(\mbox{{\tt VV}},S,X)$}$=278.48\%$ and there is no
 overlap in the standard deviation for each benchmark's time overhead.
 Finally, Table~\ref{tab:XMLResults} reveals that the communication
-primitives have difference performance characteristics since the (i)
+primitives have different performance characteristics since (i) the
 socket implementation of \texttt{VV} has a confidence interval of
 [0.023,0.025], (ii) XML-RPC has an interval of [0.072,0.107], and
 (iii) the t-test rejects the null hypothesis.
@@ -1178,8 +1178,8 @@ average across all benchmarks for sockets was 0.002375 seconds and
   $R_\Delta^\%(B,S,X)$}$=213.11\%$.  Table~\ref{tab:XMLResults}
 confirms the same empirical trend: for the {\tt GRAB}, {\tt GCD}, and
 {\tt REV} benchmarks and the language timers, sockets are faster than
-XML-RPC in a statistically significant manner.  In summary, the micro
-and macro benchmarks indicate that the transmission of small vector
+XML-RPC in a statistically significant manner.  In summary, the nano
+and micro benchmarks indicate that the transmission of small vector
 and integer parameters (i.e., $size(V)=5$) causes the socket
 communication primitive to display response times that are lower and
 less variable than XML-RPC's.
@@ -1287,8 +1287,8 @@ of $size(V)$ is less than or equal to 500.
 
 \end{tabular}
 
-\caption{Varying {\em size(V)} for the (a) SV, (b) VS, and (c) VV Nano
-Benchmarks.}
+\caption{Varying {\em size(V)} for the (a) {\tt SV}, (b) {\tt VS}, and
+  (c) {\tt VV} Nano Benchmarks.}
 
 \label{fig:varying}
 \vspace*{-.1in}
@@ -1404,7 +1404,7 @@ between $.316$ and $.35$ seconds.
 
 Executing {\tt VV} with $size(V)=10000$ exposes the fact that
 {\small$R_\Delta^\%(\mbox{{\tt VV}},S_{10000},X_{10000})=$}$-12.54\%$
-and thus XML-RPC exhibits better response times than sockets.  The
+and thus XML-RPC exhibits lower response times than sockets.  The
 confidence intervals for sockets and XML-RPC were respectively
 [0.588,0.608] and [0.469,0.577] and the result of the t-test was to
 reject the null hypothesis.  Table~\ref{tab:increasebig} also shows
@@ -1647,15 +1647,15 @@ $size(V)=10000$, the YGC and FGC events only increase response time by
 Table~\ref{tab:allgc}(a) indicates that S-{\tt VV}'s JVM performs 1645
 YGC and 663 FGC events when $size(V)=50000$, while X-{\tt VV} only
 causes 123 YGC and 5 FGC events.  The 10.375 seconds associated with
-performing the full GC events represent $55.23\%$ of the execution time
-for S-{\tt VV}.  In contrast, the FGC events performed by the X-{\tt
-  VV} JVM correspond to $8.43\%$ of the benchmark's total execution
-time.  The use of the JVM heap profiling agent called {\tt hprof}
-reports that the S-{\tt VV} JVM allocates $152,539$ objects to the
-heap while $1,506,476$ objects are allocated by the X-{\tt VV} JVM.
-However, the S-{\tt VV} benchmark allocates $710,374,184$ bytes and
-the X-{\tt VV} JVM only stores $54,101,312$ bytes.  At the point of
-benchmark termination, S-{\tt VV} has $4,773,224$ bytes of live
+performing the all of the full GC events represent $55.23\%$ of the
+execution time for S-{\tt VV}.  In contrast, the FGC events performed
+by the X-{\tt VV} JVM correspond to $8.43\%$ of the benchmark's total
+execution time.  The use of the JVM heap profiling agent called {\tt
+  hprof} reports that the S-{\tt VV} JVM allocates $152,539$ objects
+to the heap while $1,506,476$ objects are allocated by the X-{\tt VV}
+JVM.  However, the S-{\tt VV} benchmark allocates $710,374,184$ bytes
+and the X-{\tt VV} JVM only stores $54,101,312$ bytes.  At the point
+of benchmark termination, S-{\tt VV} has $4,773,224$ bytes of live
 objects in the JVM heap and the X-{\tt VV} heap contains $7,234,520$
 bytes of live objects.  Finally, the JVM behavior profiles reveal that
 the {\tt java.net.Socket} implementation allocates many {\tt char[]}
@@ -1742,7 +1742,7 @@ Java's ``new input/output'' (NIO) package.
 %% socket primitive is compared to XML-RPC.
 
 Table~\ref{tab:sover} shows the network resource consumptions for the
-micro benchmarks with $size(V) = 500$.  We do not report consumption
+nano benchmarks with $size(V) = 500$.  We do not report consumption
 measurements for benchmarks that were executed with large $size(V)$
 values since very high data transfer rates caused the {\tt tcpdump}
 kernel filter to drop a significant number of packets and this could
@@ -1858,18 +1858,20 @@ logins throughout experimentation.
 Threats to external validity would limit the generalization of our
 approach and the empirical results to new benchmarks and execution
 environments.  The experiments in this paper only focus on the use of
-four micro and macro benchmarks and the performance measurements from
-these benchmarks might be different from those produced by other
+four nano and micro benchmarks and the performance measurements from
+these benchmarks might be different from those produced by other nano,
 micro, macro, and application-specific benchmarks.  The experiments
 only evaluate sockets and XML-RPC and thus they provide no direct
 insights into the behavior of local-remote systems constructed with
-other communication primitives.  However, our framework supports the
-integration of other benchmarks and this paper reports on the results
-from using benchmarks that are similar to those that were described by
-Allman \cite{allman-per}.  Another threat to external validity is
-related to the fact that the experiments measure the performance of
-sockets and XML-RPC in a single execution environment. This is because
-the computer hardware, JVM, operating system kernel, and other
+other communication primitives.  Also, the client and server in the
+current benchmarks exchange a limited variety of parameters and return
+values.  However, our framework supports the integration of other
+benchmarks and this paper reports on the results from using benchmarks
+that are similar to those that were described by Allman
+\cite{allman-per}.  Another threat to external validity is related to
+the fact that the experiments measure the performance of sockets and
+XML-RPC in a single execution environment. This is because the
+computer hardware, JVM, operating system kernel, and other
 environmental factors were not varied during experimentation.  Yet, it
 is our judgment that the execution environment is representative of
 one that is frequently used during the development and execution of a
@@ -1934,6 +1936,8 @@ local-remote software application.
     (b) XML-RPC.}
   \label{tab:allgc}
   
+  \vspace*{-.05in}
+
 \end{table*}
 
 % NOTE: The data in this table can be misleading and thus I think 
@@ -2043,7 +2047,7 @@ sockets and XML-RPC.
 {\bf Sockets and XML-RPC}. This paper is directly related to Allman's
 empirical analysis of the socket and XML-RPC primitives
 \cite{allman-per}.  Yet, this article is different than
-\cite{allman-per} because it (i) reports benchmark results with the
+\cite{allman-per} because it (i) reports benchmark results with more
 recent versions of sockets and XML-RPC, (ii) solely focuses on
 experiments where the client and server reside on the same node, (iii)
 measures response time with OS and language-based timers, and (iv)
@@ -2167,7 +2171,7 @@ support the resolution of the differences between these two studies.
 
   \caption{Network Resource Consumption.}
   \label{tab:sover}
-  \vspace*{-.1in}
+  \vspace*{-.15in}
 
 \end{table}
 
@@ -2189,15 +2193,19 @@ Section~\ref{sec:time-overhead} reveals that, for all of the
 benchmarks, socket-based communication outperforms XML-RPC when
 $size(v)=5$.  Yet, the results in Section~\ref{sec:variation} point
 out that when the nano benchmarks perform bulk data transfer, the
-performance of sockets degrades rapidly due to increases in the number
-of GC events.
+performance of sockets degrades rapidly.
+
+% NOTE: This information does not fit in this paragraph!
+
+%%  due to increases in the number
+%% of GC events.
 
 %% We also furnish a detailed examination of the threats to the validity
 %% of the experiments in Section~\ref{sec:threats-validity}.
 
 Section~\ref{sec:virt-mach-behav} further interprets the response time
 results in light of the behavior of the JVM's garbage collector.  An
-analysis of the JVM behavior profiles shows that sockets incurs
+analysis of the JVM behavior profiles shows that sockets incur
 additional time overhead because they trigger a significant number of
 YGC and FGC events.  Furthermore, the results in
 Section~\ref{sec:space} suggest that (i) sockets generate a larger
@@ -2205,24 +2213,32 @@ number of packets than XML-RPC and (ii) the average packet size
 created by the socket-based benchmarks is smaller than the packet size
 produced by XML-RPC.  In conclusion, the results in this paper can
 serve as valuable guides when selecting Java-based primitives for
-intra-node communication.  Since it is possible to extend our
-framework with new benchmarks and statistical analysis techniques, we
-judge that future research can continue to develop a deeper
-understanding of Java's communication primitives by using these
-benchmarks.
+intra-node communication.  It is possible to extend our framework with
+new communication primitives, benchmarks, and statistical analysis
+techniques. Thus, future research, enabled by our method of approach,
+can continue to develop a deeper understanding of both general-purpose
+primitives in languages like Java (e.g., sockets and XML-RPC) and
+other customized intra-node communication schemes (e.g.,
+\cite{tanenbaum-minix3,herder-microkernel,tang-code-complex,vaidyanathan-grid}).
+
+%% by using these
+%% benchmarks.
 
 In future research, we will modify and/or re-configure the GNU/Linux
-kernel and the packet capture tools in order to more accurately
+kernel and the packet capture tools, for instance by adding larger
+buffers to store more packets, in order to more accurately
 characterize network resource consumption.  We will also improve the
 presented work by introducing multi-threaded clients and measuring
-benchmark throughput.  It would also be useful to perform these same
-benchmarks on different architectures and platforms in order to
-determine how the execution environment impacts the performance
-results.  Furthermore, we will measure message passing performance
-when the client and server exist on separate machines.  When
-communication occurs between non-local JVMs, it is also important to
-study the performance of the primitives on congested and/or unreliable
-networks.
+benchmark throughput.  We will further extend the benchmarks so that
+they can transmit more realistic parameters and return values like
+complex Java objects and binary files.  It would also be useful to use
+both the current and additional benchmarks on different architectures
+and platforms in order to determine how the execution environment
+impacts the performance results.  Moreover, we will measure message
+passing response time when the client and server exist on separate
+machines.  Since this communication will occur between non-local JVMs,
+we will study the performance of the primitives on congested and/or
+unreliable networks.
 
 We intend to execute long running benchmark campaigns that invoke a
 series of methods on the side of the server while continuing to
@@ -2236,9 +2252,18 @@ as Java-MPI \cite{getov-mpi,judd-mpi-java}, Java RMI
 and JXTA \cite{oaks-jxta,seigneur-jxta}.  These alternatives will be
 compared to sockets and XML-RPC in order to determine how each
 communication method compares to the others in terms of response time,
-network resource consumption, and JVM behavior. Finally, we will
-examine the impact that XML compression algorithms (e.g.,
-\cite{min-xpress}) have on the message passing performance of XML-RPC.
+network resource consumption, and JVM behavior.  Ultimately, we want
+to broaden our framework to also include the customized communication
+primitives used in other local-remote systems (e.g.,
+\cite{tanenbaum-minix3,herder-microkernel,tang-code-complex,vaidyanathan-grid}).
+
+%% Finally, integrate XML compression algorithms (e.g.,
+%% \cite{min-xpress}) with XML-RPC and then study the relative
+%% performance
+
+%% Finally, we will
+%% examine the impact that XML compression algorithms (e.g.,
+%% \cite{min-xpress}) have on the performance of XML-RPC.
 
 %% use these
 %% benchmarks to 
@@ -2278,6 +2303,8 @@ examine the impact that XML compression algorithms (e.g.,
 % bandwidth at small data sizes.  XML-RPC communication has better time
 % overheads at large data sizes and performs better than sockets in
 % network bandwidth in the majority of cases.
+
+\vspace*{-.075in}
 
 {\small
 \bibliographystyle{abbrv}
