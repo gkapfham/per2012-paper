@@ -2014,22 +2014,23 @@ evaluations of communication primitive performance
 Since interprocess communication (IPC) was often the limiting factor
 in micro-kernel performance, developers designed numerous benchmarks
 and used response time results to guide the design of IPC protocols
-\cite{hartig-micro-kernel,liedtke-improve-ipc}.  Thus, these studies
-are similar to the one in this paper since we also use empirical
-results to motivate the choice between primitives for intra-node
+\cite{hartig-micro-kernel,liedtke-improve-ipc}.  These studies are
+similar to the one in this paper since we also use empirical results
+to motivate the choice between primitives for intra-node
 communication.  Furthermore, Bershad et al.\ propose an interesting
 and efficient mechanism to support intra-node communication with
 lightweight RPCs \cite{bershad-lightweight}.  While our focus is on
 modern operating systems, object-oriented languages, and virtual
-machines, the LRPC primitive was implemented for both (i) the Taos
+machines, the LRPC primitive was implemented for both the Taos
 operating system and the DEC Firefly multiprocessor
-\cite{bershad-lightweight} and (ii) a previous version of the Mach
-kernel \cite{bourassa-implementing}.  Finally, both Karger and Herder
-et al.\ have developed specialized implementations and optimizations
-that improve the performance of intra-node communication
+\cite{bershad-lightweight} and a previous version of the Mach kernel
+\cite{bourassa-implementing}.  Finally, both Karger and Herder et
+al.\ have developed specialized implementations and optimizations that
+improve the performance of intra-node communication
 \cite{tanenbaum-minix3,karger-registers}.  In contrast to these
 efforts, this paper considers the evaluation of primitives that are
-already in wide use, namely Java sockets and XML-RPC.
+already in wide use and reputed to be easy to program, namely Java
+sockets and XML-RPC.
 
 %% \subsection{Sockets and XML-RPC}
 %% \label{sec:sockets-xml-rpc}
@@ -2039,28 +2040,28 @@ already in wide use, namely Java sockets and XML-RPC.
 %% Since Allman's experiments were performed, a new GNU/Linux kernel,
 %% JVM, and XML-RPC implementation have been released.
 
-{\bf Sockets and XML-RPC}. In category (ii), this paper is directly
-related to Allman's empirical analysis of the socket and XML-RPC
-primitives \cite{allman-per}.  This paper is different than
+{\bf Sockets and XML-RPC}. This paper is directly related to Allman's
+empirical analysis of the socket and XML-RPC primitives
+\cite{allman-per}.  Yet, this article is different than
 \cite{allman-per} because it (i) reports benchmark results with the
 recent versions of sockets and XML-RPC, (ii) solely focuses on
 experiments where the client and server reside on the same node, (iii)
 measures response time with OS and language-based timers, and (iv)
 explains the results in light of JVM behavior.  It is interesting to
-note that the results of this paper contrast with those found by
-Allman.  Previous work suggests that sockets and XML-RPC have similar
-response time characteristics for small transactions.  However, the
-experiments that use larger transactions show that sockets perform up
-to an order of magnitude better than XML-RPC \cite{allman-per}.  Our
-experiments demonstrate that sockets outperformed XML-RPC with smaller
-transactions but that at extremely large transaction sizes XML-RPC
-performed significantly better than sockets.  We judge that the
-conflicting performance characterizations could be attributed to the
-(i) different execution environments (e.g., kernel, OS, and JVM), (ii)
-different versions of sockets and XML-RPC, and (iii) location of the
-client and server JVMs.  The future experimentation described in
-Section~\ref{sec:conclusions} will support the resolution of the
-differences between these two studies.
+note that the results of this paper contrast with those reported by
+Allman.  The previous work suggests that sockets and XML-RPC have
+similar response time characteristics for small transactions.
+However, the experiments that use larger transactions show that
+sockets perform up to an order of magnitude better than XML-RPC
+\cite{allman-per}.  Our experiments demonstrate that sockets
+outperformed XML-RPC with smaller transactions but that at extremely
+large transaction sizes XML-RPC performed significantly better than
+sockets.  We judge that the conflicting performance characterizations
+could be attributed to the (i) different execution environments (e.g.,
+kernel, OS, and JVM), (ii) different versions of sockets and XML-RPC,
+and (iii) location of the client and server JVMs.  The future
+experimentation described in Section~\ref{sec:conclusions} will
+support the resolution of the differences between these two studies.
 
 %% \subsection{Performance Benchmarks}
 %% \label{sec:middl-benchm}
@@ -2173,7 +2174,7 @@ differences between these two studies.
 %% \section{Future Work}
 %% \label{sec:future-work}
 
-%\vspace*{-.1in}
+\vspace*{-.1in}
 \section{Conclusions and Future Work}
 \label{sec:conclusions}
 
@@ -2187,26 +2188,27 @@ the strengths and weaknesses associated with sockets and XML-RPC.
 Section~\ref{sec:time-overhead} reveals that, for all of the
 benchmarks, socket-based communication outperforms XML-RPC when
 $size(v)=5$.  Yet, the results in Section~\ref{sec:variation} point
-out that when the micro benchmarks perform bulk data transfer, the
+out that when the nano benchmarks perform bulk data transfer, the
 performance of sockets degrades rapidly due to increases in the number
 of GC events.
 
+%% We also furnish a detailed examination of the threats to the validity
+%% of the experiments in Section~\ref{sec:threats-validity}.
+
 Section~\ref{sec:virt-mach-behav} further interprets the response time
 results in light of the behavior of the JVM's garbage collector.  An
-analysis of the JVM behavior profiles shows that socket-based
-communication incurs additional time overhead when it triggers a
-significant number of YGC and FGC events.  Furthermore, the results in
+analysis of the JVM behavior profiles shows that sockets incurs
+additional time overhead because they trigger a significant number of
+YGC and FGC events.  Furthermore, the results in
 Section~\ref{sec:space} suggest that (i) sockets generate a larger
 number of packets than XML-RPC and (ii) the average packet size
 created by the socket-based benchmarks is smaller than the packet size
-produced by XML-RPC.  We also furnish a detailed examination of the
-threats to the validity of the experiments in
-Section~\ref{sec:threats-validity}.  In conclusion, the results in
-this paper can serve as valuable guides when selecting Java-based
-primitives for intra-node communication.  Since it is possible to
-extend our framework with new benchmarks and statistical analysis
-techniques, we judge that future research can continue to develop a
-deeper understanding of Java's communication primitives by using these
+produced by XML-RPC.  In conclusion, the results in this paper can
+serve as valuable guides when selecting Java-based primitives for
+intra-node communication.  Since it is possible to extend our
+framework with new benchmarks and statistical analysis techniques, we
+judge that future research can continue to develop a deeper
+understanding of Java's communication primitives by using these
 benchmarks.
 
 In future research, we will modify and/or re-configure the GNU/Linux
