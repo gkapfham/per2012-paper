@@ -64,12 +64,12 @@
 %% communication primitives that vary according to their performance and
 %% functionality.  
 
-This paper presents a benchmark suite that measures the performance of
+This paper presents a benchmarking suite that measures the performance of
 using sockets and eXtensible Markup Language remote procedure calls
 (XML-RPC) to exchange intra-node messages between Java virtual
 machines (JVMs).  The paper also reports on an empirical study
 comparing sockets and XML-RPC with response time measurements from
-profilers that use both operating system timers and Java language
+timers that use both operating system timers and Java language
 instrumentation.  By employing packet filters within the GNU/\-Linux
 kernel, the benchmark suite also calculates network resource
 consumption.  Moreover, the framework interprets the response time
@@ -212,7 +212,7 @@ about how these primitives support intra-node communication.
 
 \begin{sloppypar}
 To this end, this paper describes a benchmarking framework that uses
-both Java language and operating system profilers, kernel packet
+both Java language and operating system timers, kernel packet
 filters, and JVM behavior monitors to respectively characterize the
 response time, network resource consumption, and memory subsystem
 activity of both sockets and XML-RPC. In particular, the benchmarks
@@ -401,7 +401,7 @@ due to the prevalence of this configuration.
 \label{fig:intranode-communication}
 \end{figure}
 
-\subsection{Benchmark Suites}
+\subsection{Benchmarking Suites}
 \label{sec:benchmarking-suites}
 
 % NOTE: this paragraph was changed so that the reader can tell that we
@@ -939,7 +939,7 @@ confidence intervals that we calculated.
 
 %\begin{sloppypar}
 
-We apply these additional statistical analyses with the observation
+We apply these additional statistical analyses with the observations
 that (i) the response times adhere to an interval measurement scale,
 (ii) the $N$ samples within $\mathcal{R}$ are independent, and (iii)
 the variances of the response times for the two different
@@ -2231,7 +2231,7 @@ characterize network resource consumption.  We will also improve the
 presented work by introducing multi-threaded clients and measuring
 benchmark throughput.  We will further extend the benchmarks so that
 they can transmit more realistic parameters and return values like
-complex Java objects and binary files.  It would also be useful to use
+complex Java objects and binary files.  It would also be useful to run
 both the current and additional benchmarks on different architectures
 and platforms in order to determine how the execution environment
 impacts the performance results.  Moreover, we will measure message
