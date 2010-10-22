@@ -1,7 +1,5 @@
 \begin{thebibliography}{10}
 
-\vspace*{.1in}
-
 \bibitem{agarwal-sp2}
 R.~C. Agarwal, B.~Alpern, L.~Carter, F.~G. Gustavson, D.~J. Klepacki,
   R.~Lawrence, and M.~Zubair.
@@ -114,7 +112,7 @@ P.~A. Karger.
 
 \bibitem{kawachiya-string-ineff}
 K.~Kawachiya, K.~Ogata, and T.~Onodera.
-\newblock Analysis and reduction of memory inefficiencies in java strings.
+\newblock Analysis and reduction of memory inefficiencies in {Java} strings.
 \newblock In {\em Proc. of 23rd OOPSLA}, 2008.
 
 \bibitem{liedtke-improve-ipc}
@@ -196,7 +194,7 @@ S.~Wallace and K.~Hazelwood.
 \bibitem{wells-linda-java-journal}
 G.~C. Wells.
 \newblock New and improved: Linda in {Java}.
-\newblock {\em Science of Computer Programming}, 59(1--2), January 2006.
+\newblock {\em Scien. of Comp. Progr.}, 59(1--2), January 2006.
 
 \bibitem{zhang-hbenchjava}
 X.~Zhang and M.~Seltzer.

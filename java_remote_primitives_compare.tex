@@ -198,9 +198,9 @@ effort due to the use of custom intra-node communication primitives
 \begin{sloppypar}
 In contrast to specialized implementations of local-remote
 communication, the Java programming language furnishes a wide variety
-of remote communication primitives (RCPs) that have different
-performance characteristics and functionality.  Yet, the Java
-implementation of two representative RCPs, sockets and eXtensible
+of easy-to-program remote communication primitives (RCPs) that have
+different performance characteristics and functionality.  Yet, the
+Java implementation of two representative RCPs, sockets and eXtensible
 Markup Language remote procedure call (XML-RPC), were not specifically
 designed to support communication between Java virtual machines (JVMs)
 on the same computational node.  While previous empirical studies
@@ -1602,7 +1602,7 @@ message in order to transform the text back into objects.  The XML-RPC
 server and client reverse this procedure to respectively handle the
 encoding and decoding on the return value.  Overall, both of the
 benchmarks process characters and strings since they use a textual
-representation for the parameters and return values.  The frequent
+representation for the parameters and return values.  Yet, the frequent
 conversion between Java objects and text and the use of strings and
 characters often cause the benchmarks to inefficiently allocate many
 data values to the heap \cite{kawachiya-string-ineff}.
@@ -1647,7 +1647,7 @@ $size(V)=10000$, the YGC and FGC events only increase response time by
 Table~\ref{tab:allgc}(a) indicates that S-{\tt VV}'s JVM performs 1645
 YGC and 663 FGC events when $size(V)=50000$, while X-{\tt VV} only
 causes 123 YGC and 5 FGC events.  The 10.375 seconds associated with
-performing the all of the full GC events represent $55.23\%$ of the
+performing all of the full GC events represent $55.23\%$ of the
 execution time for S-{\tt VV}.  In contrast, the FGC events performed
 by the X-{\tt VV} JVM correspond to $8.43\%$ of the benchmark's total
 execution time.  The use of the JVM heap profiling agent called {\tt
@@ -1859,7 +1859,7 @@ Threats to external validity would limit the generalization of our
 approach and the empirical results to new benchmarks and execution
 environments.  The experiments in this paper only focus on the use of
 four nano and micro benchmarks and the performance measurements from
-these benchmarks might be different from those produced by other nano,
+these studies might be different from those produced by other nano,
 micro, macro, and application-specific benchmarks.  The experiments
 only evaluate sockets and XML-RPC and thus they provide no direct
 insights into the behavior of local-remote systems constructed with
@@ -2028,8 +2028,8 @@ modern operating systems, object-oriented languages, and virtual
 machines, the LRPC primitive was implemented for both the Taos
 operating system and the DEC Firefly multiprocessor
 \cite{bershad-lightweight} and a previous version of the Mach kernel
-\cite{bourassa-implementing}.  Finally, both Karger and Herder et
-al.\ have developed specialized implementations and optimizations that
+\cite{bourassa-implementing}.  Finally, both Herder et al.\ and Karger
+have developed specialized implementations and optimizations that
 improve the performance of intra-node communication
 \cite{tanenbaum-minix3,karger-registers}.  In contrast to these
 efforts, this paper considers the evaluation of primitives that are
@@ -2226,9 +2226,9 @@ other customized intra-node communication schemes (e.g.,
 
 In future research, we will modify and/or re-configure the GNU/Linux
 kernel and the packet capture tools, for instance by adding larger
-buffers to store more packets, in order to more accurately
-characterize network resource consumption.  We will also improve the
-presented work by introducing multi-threaded clients and measuring
+buffers to store additional packets, in order to more accurately
+characterize network resource consumption.  We also want to improve
+the presented work by introducing multi-threaded clients and measuring
 benchmark throughput.  We will further extend the benchmarks so that
 they can transmit more realistic parameters and return values like
 complex Java objects and binary files.  It would also be useful to run
