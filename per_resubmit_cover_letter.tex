@@ -1,0 +1,266 @@
+% $Id: for_president.tex,v 1.1 2008/11/24 13:14:13 gkapfham Exp $
+
+\documentclass[11pt]{article}
+
+%\documentclass{book}
+%\usepackage{phic}
+
+%\usepackage{times}
+
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+
+%\makeindex
+
+% Settings that I normally use
+%\textwidth = 6.5in
+%\textheight = 9.00in
+\topmargin 0.0in
+%\oddsidemargin 0.0in
+%\evensidemargin 0.0in 
+
+% settings from Allen Tucker 650 --> 640
+\setlength{\textwidth} {420pt}
+\setlength{\textheight} {620pt} 
+\setlength{\oddsidemargin} {20pt}
+\setlength{\marginparwidth} {72in}
+
+%\usepackage{times}
+%\usepackage{mathptm}
+
+% this allows us to get the definitions that are not italicized
+
+\usepackage{amsthm}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{url}
+
+%\usepackage[named]{algo}
+%\usepackage{algo}
+
+\usepackage{listings}
+%\usepackage{apalike}
+\usepackage[authoryear]{natbib}
+%\usepackage{chicago}
+%\usepackage{keyval}
+%\usepackage{epsfig} 
+\usepackage{array}
+%\usepackage{fancyhdr} 
+
+% set it so that subsubsections have numbers and they
+% are displayed in the TOC (maybe hard to read, might want to disable)
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% define widow protection
+
+\def\widow#1{\vskip #1\vbadness10000\penalty-200\vskip-#1}
+
+\clubpenalty=10000  % Don't allow orphans
+\widowpenalty=10000 % Don't allow widows
+
+% this should give me the ability to use some math symbols that 
+% were available by default in standard latex (i.e. \Box)
+
+\usepackage{latexsym}
+
+% define a little section heading that doesn't go with any number
+
+\def\littlesection#1{
+\widow{2cm}
+\vskip 0.5cm
+\noindent{\bf #1}
+\vskip 0.0001cm 
+%\noindent
+}
+
+%Check if we are compiling under latex or pdflatex
+%% \ifx\pdftexversion\undefined
+%%   \usepackage[dvips]{graphics}
+%% \else
+%%   \usepackage[pdftex]{graphics}
+%% \fi
+
+%\lhead{Section \thesection}
+%\chead{}
+%\rhead{Page \thepage}
+%\lfoot{Gregory M. Kapfhammer}
+%\cfoot{}
+%\rfoot{\today} 
+
+%% \pagestyle{fancyplain}
+
+%% \newcommand{\tstamp}{\today}   
+%% %\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%% \renewcommand{\sectionmark}[1]{\markright{#1}}
+%% \lhead[\Section \thesection]            {\fancyplain{}{\rightmark}}
+%% \chead[\fancyplain{}{}]                 {\fancyplain{}{}}
+%% \rhead[\fancyplain{}{\rightmark}]       {\fancyplain{}{\thepage}}
+%% %\lfoot[\fancyplain{}{}]                 {\fancyplain{\tstamp}{\tstamp}}
+%% \cfoot[\fancyplain{\thepage}{}]         {\fancyplain{\thepage}{}}
+%% %\rfoot[\fancyplain{\tstamp} {\tstamp}]  {\fancyplain{}{}}
+
+%% \newlength{\myVSpace}% the height of the box
+%% \setlength{\myVSpace}{1ex}% the default, 
+%% \newcommand\xstrut{\raisebox{-.5\myVSpace}% symmetric behaviour, 
+%%   {\rule{0pt}{\myVSpace}}%
+%% }
+
+% A paraphrase mode that makes it easy to see the stuff that shouldn't
+% stay in for the final paper
+
+\newdimen\tmpdim
+\long\def\paraphrase#1{{\parskip=0pt\hfil\break
+\tmpdim=\hsize\advance\tmpdim by -15pt\noindent%
+\hbox to \hsize
+{\vrule\hskip 3pt\vrule\hfil\hbox to \tmpdim{\vbox{\hsize=\tmpdim
+\def\par{\leavevmode\endgraf}
+\obeyspaces \obeylines
+\let\par=\endgraf
+\bf #1}}}}}
+
+% leave things with no spacing extra spacing in the final version of the paper
+\renewcommand{\baselinestretch}{1.0}    % must go before the begin of doc
+
+% suppress the use of indentation for a paragraph
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.1in}
+
+\begin{document}
+
+%\baselineskip=22pt
+%\setlength{\parindent} {.5in}
+
+\newtheorem{assume}{Assumption}
+
+\newtheorem{consider}{Consideration}
+
+% we are now going with the new method that is from the DIATOMS proposal
+
+%\newtheorem{problem}{Problem}
+%\newtheorem{define}{Definition}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\theoremstyle{definition}
+\newtheorem{principle}{Principle}
+
+% handle widows appropriately
+\def\widow#1{\vskip #1\vbadness10000\penalty-200\vskip-#1}
+
+% build the title section
+
+\makeatletter
+
+\def\maketitle{%
+  %\null
+  \thispagestyle{empty}%
+  %\vfill
+  \begin{center}%\leavevmode
+    %\normalfont
+    {\Huge \@title\par}%
+    %\hrulefill\par
+    {\normalsize \@author\par}%
+    \vskip .4in
+%    {\Large \@date\par}%
+  \end{center}%
+  %\vfill
+  %\null
+  %\cleardoublepage
+
+  }
+
+\makeatother
+
+% build the author section
+Gregory M. Kapfhammer\\
+Department of Computer Science\\
+Allegheny College \\
+October 27, 2010
+
+\noindent
+To Whom it May Concern,
+
+My co-authors and I would like to thank the editor and past-editor of
+{\em Performance Evaluation Review} and the reviwers for enabling us
+to make substantial improvements to our paper.  This cover letter
+outlines the changes that we made in response to the comments from the
+two reviewers.
+
+Reviewer 1: \vspace*{-.15in}
+\renewcommand{\labelitemi}{$\rightarrow$}
+
+\begin{enumerate}
+
+  \item {\bf List of Contributions}: The paper contains a list of
+    contributions that is too long.
+
+    \begin{itemize}
+      
+      \item We have substantially reduced the number of items listed
+        as contributions.  For instance, all of the points about the
+        experimental results have now been removed and placed into the
+        appropriate location in Section 5.
+
+    \end{itemize}
+
+  \item {\bf Benchmark Naming Conventions}: The names for the
+    benchmarks are misleading because the ``macro'' benchmarks are
+    only slightly bigger than the ``micro'' benchmarks.
+
+    \begin{itemize}
+      
+      \item Section 2.2 now refers to ``nano'' and ``micro''
+        benchmarks, with Footnote 1 justifying our choice of this
+        terminology.  All of the text and graphs have been updated to
+        reflect this new naming convention.
+
+    \end{itemize}
+
+  \item {\bf Choice of Communication Primitives}: All of the chosen
+    communication primitives require access to the network interface.
+    Wouldn't it be possible to use other, perhaps more efficient,
+    primitives that can avoid accessing the network?
+
+    \begin{itemize}
+      
+      \item Section 1 contains a revised introduction that better
+        justifies our focus on remote communication primitives in the
+        Java programming language.  In essence, many of the custom
+        communication primitives can incur increases in source code
+        complexity and implementation effort.  This empirical study in
+        this paper in the first step towards determining if
+        easy-to-program remote communication primitives in the Java
+        language could be used instead of custom schemes.  Moreover,
+        the benchmarking framework in this paper could also be used to
+        evaluate other types of communication primitives.  We have
+        revised Sections 1, 6, and 7 to reflect these facts.
+
+    \end{itemize}
+
+  \item {\bf Minor Changes to Graphs and Sentences}: The fonts in
+    Figures 3, 4, and 5 are too small and several of the sentences are
+    difficult to understand.
+
+    \begin{itemize}
+      
+      \item In order to ensure that the paper fits into the ten page
+        limit, we cut many paragraphs of content.  However, space
+        constraints currently prevent us from substantially increasing
+        the font size in the graphs.  Finally, we have revised many of
+        the sentences in the paper in order to guarantee that the
+        content is easy to understand.
+
+    \end{itemize}
+
+\end{enumerate}
+
+\end{document}
