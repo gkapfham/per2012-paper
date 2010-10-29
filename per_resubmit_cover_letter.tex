@@ -181,19 +181,21 @@
 \makeatother
 
 % build the author section
-Gregory M. Kapfhammer\\
-Department of Computer Science\\
-Allegheny College \\
+Leana Golubchik \\
+Computer Science Department \\
+University of Southern California \\
 October 27, 2010
 
 \noindent
-To Whom it May Concern,
+Dear Editor,
 
 My co-authors and I would like to thank the editor and past-editor of
-{\em Performance Evaluation Review} and the reviwers for enabling us
+{\em Performance Evaluation Review} and the reviewers for enabling us
 to make substantial improvements to our paper.  This cover letter
 outlines the changes that we made in response to the comments from the
-two reviewers.
+two reviewers.  In what follows, we summarize all of the concerns of
+each reviewer and then explain how we handled the matter (we sometimes
+consider several related comments in the same point).
 
 Reviewer 1: \vspace*{-.15in}
 \renewcommand{\labelitemi}{$\rightarrow$}
@@ -201,7 +203,7 @@ Reviewer 1: \vspace*{-.15in}
 \begin{enumerate}
 
   \item {\bf List of Contributions}: The paper contains a list of
-    contributions that is too long.
+    contributions that is too long. \label{item:toomany}
 
     \begin{itemize}
       
@@ -221,14 +223,16 @@ Reviewer 1: \vspace*{-.15in}
       \item Section 2.2 now refers to ``nano'' and ``micro''
         benchmarks, with Footnote 1 justifying our choice of this
         terminology.  All of the text and graphs have been updated to
-        reflect this new naming convention.
+        reflect this naming convention, which we deem to be both
+        accurate and easy to understand.
 
     \end{itemize}
 
-  \item {\bf Choice of Communication Primitives}: All of the chosen
+  \item {\bf Choice of Communication Primitives}: Both of the chosen
     communication primitives require access to the network interface.
     Wouldn't it be possible to use other, perhaps more efficient,
-    primitives that can avoid accessing the network?
+    primitives that can avoid accessing the
+    network? \label{item:choice}
 
     \begin{itemize}
       
@@ -236,13 +240,13 @@ Reviewer 1: \vspace*{-.15in}
         justifies our focus on remote communication primitives in the
         Java programming language.  In essence, many of the custom
         communication primitives can incur increases in source code
-        complexity and implementation effort.  This empirical study in
+        complexity and implementation effort.  The empirical study in
         this paper in the first step towards determining if
         easy-to-program remote communication primitives in the Java
         language could be used instead of custom schemes.  Moreover,
         the benchmarking framework in this paper could also be used to
         evaluate other types of communication primitives.  We have
-        revised Sections 1, 6, and 7 to reflect these facts.
+        revised Sections 1, 2, 3, 6, and 7 to reflect these facts.
 
     \end{itemize}
 
@@ -262,5 +266,274 @@ Reviewer 1: \vspace*{-.15in}
     \end{itemize}
 
 \end{enumerate}
+
+\newpage
+
+Reviewer 2: \vspace*{-.15in}
+\renewcommand{\labelitemi}{$\rightarrow$}
+
+\begin{enumerate}
+
+  \item {\bf Focus and Motivation of the Paper}: Can you better
+    motivate why this result would help to solve a real-world problem
+    in the area of intra-node communication?  
+
+    \begin{itemize}
+      
+      \item We judge that this concern is connected to
+        Item~\ref{item:choice} raised by Reviewer 1.  We modified
+        several sections of the paper, including the abstract and
+        Sections 1, 2, 3, 6, and 7, in order to clarify the motivation
+        of this article.
+
+    \end{itemize}
+
+  \item {\bf Title of the Paper}: The initial title of the paper uses
+    the term ``primitive'' to refer to a ``communication primitive.''
+    However, both a table and a paragraph in the paper also use the
+    word to stand for a ``data primitive.''
+
+    \begin{itemize}
+      
+      \item We have resolved this naming conflict by changing the
+        title of the paper and now carefully using the term ``remote
+        communication primitive'' through the article.  Instead of
+        using the phrase ``data primitive'' we now write ``data
+        value'' in Tables 1 and 2 and throughout the paper.  Following
+        the reviewer's suggestion, the new title of the paper better
+        connects to the performance evaluation that we undertook.
+
+    \end{itemize}
+
+  \item {\bf Additional Research Questions}: Can you address other
+    research questions such as ``how do the results depend on using
+    different data types?''
+
+    \begin{itemize}
+      
+      \item Our primary focus is to use the benchmarking framework to
+        measure and explain response time results for two remote
+        communication primitives.  In order to accomplish this task
+        well, we were not able to fully address the suggested research
+        questions.  However, the presented framework can be enhanced
+        and Section 7 has been re-written to better highlight future
+        endeavors to more fully answer your questions.
+
+    \end{itemize}
+
+  \item {\bf Errors in Computing the Metrics}: Can you fix the errors
+    and/or discrepancies in the calculations for the percent change in
+    the evaluation metrics?
+
+    \begin{itemize}
+      
+      \item We revisited and ultimately hand-checked each of the
+        calculations for every metric listed in Section 4.  The
+        current version of the paper contains correct values for all
+        of the metrics and the corresponding percent increase values.
+        Furthermore, we carefully revised the notation in Section 4
+        that explains each of the metrics.  For instance, the paper
+        now fully describes the different types of percent change in
+        the metrics.
+
+
+    \end{itemize}
+
+  \item {\bf Missing References}: Can you include the references to
+    things like the HotSpot adaptive optimizer and certain papers that
+    support your assertions?
+
+    \begin{itemize}
+      
+      \item We now include a reference to a paper that describes the
+        HotSpot adaptive optimization component. We do not include a
+        specific reference for projects like XML-RPC due to space
+        constraints and the fact that the Web site addresses for this
+        type of project may frequently change.  We also reference a
+        paper that supports our assertion that the use of XML-RPC may
+        compromise performance.
+
+    \end{itemize}
+
+\newpage
+
+  \item {\bf Reorganize the Introduction}: Can you remove some of the
+    points that are in the list of contributions (e.g., threats to
+    validity)?
+
+    \begin{itemize}
+      
+      \item We think that this concern is connected to
+        Item~\ref{item:toomany} raised by Reviewer 1.  As such, we
+        have removed the discussion of threats to validity from the
+        list of contributions.
+
+    \end{itemize}
+
+  \item {\bf Clarify Sentences and Notation}: Several of the sentences
+    contain phrases that are hard to understand -- can you fix these?
+    Also, the notation should be changed so that you use $N$ trials in
+    the algorithm instead of $L$.
+
+    \begin{itemize}
+      
+      \item We have made all of the requested changes in sentence
+        structure and notation.  For instance, the algorithm in Figure
+        2 and all of the content in the paper now use $N$ to denote
+        the number of trials.  We have also clarified the meaning of
+        the term ``sequence'' and, as previously mentioned, we use
+        ``data value'' instead of ``data primitive.''  In summary, we
+        have made all of these requested changes in Sections 1 through
+        7.
+        
+    \end{itemize}
+
+  \item {\bf Table Movement}: Can you move the tables to the same page
+    where they are discussed?
+
+    \begin{itemize}
+      
+      \item We moved Tables 1 and 2 to the third page of the paper.
+        We tried to keep tables and figures close to the appropriate
+        paragraphs whenever this layout would not ruin the overall
+        organization and aesthetic appeal of the paper.
+        
+    \end{itemize}
+
+  \item {\bf Benchmark Name}: Can you change the name of a benchmark to
+    better reflect its actual purpose?  Furthermore, the paper must
+    clearly define the meaning of $B$ and $P$.
+
+    \begin{itemize}
+      
+      \item Instead of using the term ``FIND'' we now write ``GRAB''
+        to reinforce the fact that the algorithm is $O(1)$.  We have
+        made this change in both the text and the graphs.  The paper
+        now explicitly states that $B$ can be any one of the
+        benchmarks listed in Tables 1 and 2 and that $P$ can stand for
+        either sockets ($S$) or XML-RPC ($X$).
+        
+    \end{itemize}
+
+  \item {\bf Statistical Assumptions}: Even though it only directly
+    refers to two ``assumptions,'' the paper defines three that
+    undergird the statistical analysis.
+
+    \begin{itemize}
+      
+      \item Instead of using the term ``assumption'' we now write
+        ``observation.'' We re-wrote the paragraph in Section
+        4.2 so that it refers to all three of the observations.
+        
+    \end{itemize}
+
+  \item {\bf String Processing}: The paper states that the XML-RPC
+    server must perform ``additional string processing'' -- can you
+    explain why this is the case?
+
+    \begin{itemize}
+      
+      \item Section 5.3 now contains a full paragraph to explain more
+        about how the implementation of the benchmarks impacts the
+        performance results.  Briefly, both the socket and XML-RPC
+        benchmarks use strings and character data at least one time
+        during the transmission of the parameters and the return
+        values.  We also cite reference [21] in support of the claim
+        that additional string processing may cause the benchmarks to
+        inefficiently allocate data values to the heap.
+        
+    \end{itemize}
+
+\newpage
+
+  \item {\bf Modify the Conclusions and Future Work}: Some of the
+    material in the related work section is not absolutely needed
+    (e.g., ``Performance Benchmarks'' and ``Java Performance
+    Analysis'').  Furthermore, several of the sentences are written in
+    a confusing fashion.
+
+    \begin{itemize}
+      
+      \item We re-wrote Section 6 so that it focuses on related work
+        in the areas of communication primitives and sockets and
+        XML-RPC.  The current version of the paper also avoids the
+        confusing use of ``(i)'', ``(ii)'', etc.
+        
+    \end{itemize}
+
+  \item {\bf Explanatory Nature of Tables and Figures}: All of the
+    tables and figures should be self-contained in nature.
+
+    \begin{itemize}
+      
+      \item We added one line comments to Tables 4, 5, and 7 in order
+        to ensure that the reader can understand the content without
+        having to read all of the surrounding content.  For instance,
+        we now clarify that Table 4 only refers to response times
+        calculated with the Java language-based timers.
+        
+    \end{itemize}
+
+  \item {\bf Differentiate the Timers}: A cursory glance at Table 5
+    does not allow the reader to determine what type of timer was
+    used.
+
+    \begin{itemize}
+      
+      \item The final column in Table 5 now contains a checkmark to
+        indicate which type of instrumentation was used to collect the
+        response time values.  Furthermore, we carefully checked that
+        the text in Section 5 refers to each one of the rows in this
+        table.
+        
+    \end{itemize}
+
+  \item {\bf Discuss the Subscripts}: The paper should explain the
+    meaning of notation like $S_{500}$.
+
+    \begin{itemize}
+      
+      \item Footnote 3 in Section 5 now explains the meaning of the
+        notation $P_k$, using $S_{500}$ as a concrete example that
+        stands for the use of sockets to transmit a vector of size
+        500.
+        
+    \end{itemize}
+
+  \item {\bf Table Headers}: All table headers should fully explain
+    the data values in the column.
+
+    \begin{itemize}
+      
+      \item We carefully checked to ensure that all of the headers in
+        the table accurately reflect the data values.  For instance,
+        the header in Table 7 now indicates that the values correspond
+        to a count of the number of packets.
+        
+    \end{itemize}
+
+\end{enumerate}
+
+\vspace*{-.15in}
+
+In addition to making all of the suggested changes (and those
+modifications implied by these requests), we also revised the
+algorithm in Figure 2 and the equations in Section 4.  For instance,
+Equation (5) and the preceding paragraph clearly explain how the
+benchmarking framework estimates the total network consumption in
+bytes.  The paper now explains how we calculate the percent changes
+across a group of benchmarks and it gives the equations for computing
+the arithmetic mean and the standard deviations.  We have also
+enhanced all of the sentences and paragraphs in the paper.  As an
+example, the new abstract is both more focused and shorter than the
+one in the previous edition.  In conclusion, we hope that this
+revised paper handles the reviewers' concerns and we look forward to
+soon learning more about the status of the article.
+
+\vspace*{.15in}
+\noindent
+Gregory M. Kapfhammer \\
+Department of Computer Science \\
+Allegheny  College 
 
 \end{document}

@@ -212,16 +212,16 @@ about how these primitives support intra-node communication.
 
 \begin{sloppypar}
 To this end, this paper describes a benchmarking framework that uses
-both Java language and operating system timers, kernel packet
-filters, and JVM behavior monitors to respectively characterize the
-response time, network resource consumption, and memory subsystem
-activity of both sockets and XML-RPC. In particular, the benchmarks
-support the performance evaluation of Java-based software systems that
-perform intra-node communication, as depicted in
+Java language and operating system timers, kernel packet filters, and
+JVM behavior monitors to respectively characterize the response time,
+network resource consumption, and memory subsystem activity of both
+sockets and XML-RPC. In particular, the benchmarks support the
+performance evaluation of Java-based software systems that perform
+intra-node communication, as depicted in
 Figure~\ref{fig:intranode-communication}.  The experimental results
 indicate that the combined use of simple benchmarks and statistical
 analysis techniques can identify important trade-offs in the
-intra-node communication performance of Java programs.  
+intra-node communication performance of Java programs.
 
 As such, this paper frames and begins to answer the question {\em can
   Java RCPs support intra-node communication}?  We anticipate that the
@@ -398,6 +398,8 @@ due to the prevalence of this configuration.
 
 \caption{Intra-Node Communication.}
 
+\vspace*{-.1in}
+
 \label{fig:intranode-communication}
 \end{figure}
 
@@ -431,21 +433,21 @@ software performance benchmarks into one of four categories: (i)
 micro, (ii) macro, (iii) combined, and (iv) application-specific
 benchmarks \cite{zhang-hbenchjava}.  In the context of intra-node
 communication, this paper describes nano and micro benchmarks that
-measure the performance of remote communication primitives for Java.
-Our nano benchmarks focus on the analysis of several basic operations
-that are commonly used in local-remote applications (e.g.,
-transmission of a single value or a list of data
-values).\footnote{{\small Since the metric prefix ``nano'' ($10^{-9}$)
+measure the performance of remote communication primitives for
+Java.\footnote{{\small Since the metric prefix ``nano'' ($10^{-9}$)
     denotes a number that is smaller than the one described by the
     ``micro'' ($10^{-6}$) prefix, we use the term {\em nano benchmark}
     to refer to a benchmark that is smaller than its macro
     counterpart.  We selected this descriptor instead of the
     previously used term {\em kernel benchmark} \cite{agarwal-sp2}
     since ``kernel'' now commonly refers to a part of an operating
-    system. }}  The micro benchmarks incorporate small and
-well-defined operations (e.g., finding a data value in a list or
-reversing the provided list) that require server-side computations and
-thus may be found in a real-world local-remote system.
+    system. }}  Our nano benchmarks focus on the analysis of several
+basic operations that are commonly used in local-remote applications
+(e.g., transmission of a single value or a list of data values).  The
+micro benchmarks incorporate small and well-defined operations (e.g.,
+finding a data value in a list or reversing the provided list) that
+require server-side computations and thus may be found in a real-world
+local-remote system.
 \end{sloppypar}
 
 According to Horgan et al. \cite{horgan-measure-runtime}, the
@@ -771,14 +773,14 @@ of the captured packets by the total number of packets received by the
 $\Phi_c$ and $\Phi_r$ to respectively stand for the sets of captured
 and received packets.  Moreover, this equation uses the {\em size}
 function to return the size in bytes for a given packet $\upphi \in
-\Phi_c$.  $W(B,P, \Phi_c, \Phi_r)$ is a only estimate of the actual
+\Phi_c$.  $W(B,P, \Phi_c, \Phi_r)$ is only an estimate of the actual
 network consumption since it assumes that all packets that were
 received, but not captured and analyzed, are of the average size of
 those packets $\upphi \in \Phi_c$.  While the use of $W(B,P, \Phi_c,
 \Phi_r)$ is a reasonable first step towards approximating network
-consumption, Section~\ref{sec:conclusions} suggests ways to avoid
-  this estimation of network resource consumption and thus improve
-  future empirical studies of Java's remote communication primitives.
+consumption, Section~\ref{sec:conclusions} suggests ways to avoid this
+estimation of network resource consumption and thus improve future
+empirical studies of Java's remote communication primitives.
 \end{sloppypar}
 
 \vspace*{-.1in}
@@ -1860,14 +1862,14 @@ approach and the empirical results to new benchmarks and execution
 environments.  The experiments in this paper only focus on the use of
 four nano and micro benchmarks and the performance measurements from
 these studies might be different from those produced by other nano,
-micro, macro, and application-specific benchmarks.  The experiments
-only evaluate sockets and XML-RPC and thus they provide no direct
-insights into the behavior of local-remote systems constructed with
-other communication primitives.  Also, the client and server in the
-current benchmarks exchange a limited variety of parameters and return
-values.  However, our framework supports the integration of other
-benchmarks and this paper reports on the results from using benchmarks
-that are similar to those that were described by Allman
+micro, macro, combined, and application-specific benchmarks.  The
+experiments only evaluate sockets and XML-RPC and thus they provide no
+direct insights into the behavior of local-remote systems constructed
+with other communication primitives.  Also, the client and server in
+the current benchmarks exchange a limited variety of parameters and
+return values.  However, our framework supports the integration of
+other benchmarks and this paper reports on the results from using
+benchmarks that are similar to those that were described by Allman
 \cite{allman-per}.  Another threat to external validity is related to
 the fact that the experiments measure the performance of sockets and
 XML-RPC in a single execution environment. This is because the
@@ -1996,7 +1998,7 @@ GNU/Linux kernel and/or enhancing existing packet capture tools.
 \section{Related Work}
 \label{sec:related-work}
 
-This focus of this paper connects to prior work in the areas of the
+The focus of this paper connects to prior work in the areas of the
 implementation of remote communication primitives and the benchmarking
 of sockets and XML-RPC.
 
