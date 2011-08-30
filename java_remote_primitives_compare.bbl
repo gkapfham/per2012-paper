@@ -40,7 +40,7 @@ V.~Bourassa and J.~Zahorjan.
 \newblock Technical Report TR-95-02-01, 1995.
 
 \bibitem{dasgupta-clouds}
-P.~Dasgupta, J.~Richard J.~LeBlanc, M.~Ahamad, and U.~Ramachandran.
+P.~Dasgupta, {R. J. LeBlanc, Jr.}, M.~Ahamad, and U.~Ramachandran.
 \newblock The {Clouds} distributed operating system.
 \newblock {\em IEEE Comp.}, 24(11), 1991.
 
@@ -85,8 +85,8 @@ J.~N. Herder, H.~Bos, B.~Gras, P.~Homburg, and A.~S. Tanenbaum.
 
 \bibitem{herder-microkernel}
 J.~N. Herder, H.~Bros, and A.~S. Tanenbaum.
-\newblock {A Lightweight Method for Building Reliable Operating Systems Despite
-  Unreliable Device Drivers}.
+\newblock A lightweight method for building reliable operating systems despite
+  unreliable device drivers.
 \newblock Technical Report IR-CS-018, Vrije Universiteit, 2006.
 
 \bibitem{heydon-java-core}
@@ -160,8 +160,8 @@ V.~Roubtsov.
 \bibitem{schalnsker-multi-core}
 M.~Schlansker, N.~Chitlur, E.~Oertli, J.~Paul M.~Stillwell, L.~Rankin,
   D.~Bradford, R.~J. Carter, J.~Mudigonda, N.~Binkert, and N.~P. Jouppi.
-\newblock High-performance ethernet-based communications for future multi-core
-  processors.
+\newblock High-performance {E}thernet-based communications for future
+  multi-core processors.
 \newblock In {\em Proc. of ICS}, 2007.
 
 \bibitem{seigneur-jxta}
