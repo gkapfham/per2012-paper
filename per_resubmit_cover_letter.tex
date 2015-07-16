@@ -17,11 +17,11 @@
 %\textheight = 9.00in
 \topmargin 0.0in
 %\oddsidemargin 0.0in
-%\evensidemargin 0.0in 
+%\evensidemargin 0.0in
 
 % settings from Allen Tucker 650 --> 640
 \setlength{\textwidth} {420pt}
-\setlength{\textheight} {620pt} 
+\setlength{\textheight} {620pt}
 \setlength{\oddsidemargin} {20pt}
 \setlength{\marginparwidth} {72in}
 
@@ -45,9 +45,9 @@
 \usepackage[authoryear]{natbib}
 %\usepackage{chicago}
 %\usepackage{keyval}
-%\usepackage{epsfig} 
+%\usepackage{epsfig}
 \usepackage{array}
-%\usepackage{fancyhdr} 
+%\usepackage{fancyhdr}
 
 % set it so that subsubsections have numbers and they
 % are displayed in the TOC (maybe hard to read, might want to disable)
@@ -62,7 +62,7 @@
 \clubpenalty=10000  % Don't allow orphans
 \widowpenalty=10000 % Don't allow widows
 
-% this should give me the ability to use some math symbols that 
+% this should give me the ability to use some math symbols that
 % were available by default in standard latex (i.e. \Box)
 
 \usepackage{latexsym}
@@ -73,7 +73,7 @@
 \widow{2cm}
 \vskip 0.5cm
 \noindent{\bf #1}
-\vskip 0.0001cm 
+\vskip 0.0001cm
 %\noindent
 }
 
@@ -89,11 +89,11 @@
 %\rhead{Page \thepage}
 %\lfoot{Gregory M. Kapfhammer}
 %\cfoot{}
-%\rfoot{\today} 
+%\rfoot{\today}
 
 %% \pagestyle{fancyplain}
 
-%% \newcommand{\tstamp}{\today}   
+%% \newcommand{\tstamp}{\today}
 %% %\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 %% \renewcommand{\sectionmark}[1]{\markright{#1}}
 %% \lhead[\Section \thesection]            {\fancyplain{}{\rightmark}}
@@ -104,8 +104,8 @@
 %% %\rfoot[\fancyplain{\tstamp} {\tstamp}]  {\fancyplain{}{}}
 
 %% \newlength{\myVSpace}% the height of the box
-%% \setlength{\myVSpace}{1ex}% the default, 
-%% \newcommand\xstrut{\raisebox{-.5\myVSpace}% symmetric behaviour, 
+%% \setlength{\myVSpace}{1ex}% the default,
+%% \newcommand\xstrut{\raisebox{-.5\myVSpace}% symmetric behaviour,
 %%   {\rule{0pt}{\myVSpace}}%
 %% }
 
@@ -206,7 +206,7 @@ Reviewer 1: \vspace*{-.15in}
     contributions that is too long. \label{item:toomany}
 
     \begin{itemize}
-      
+
       \item We have substantially reduced the number of items listed
         as contributions.  For instance, all of the points about the
         experimental results have now been removed and placed into the
@@ -219,7 +219,7 @@ Reviewer 1: \vspace*{-.15in}
     only slightly bigger than the ``micro'' benchmarks.
 
     \begin{itemize}
-      
+
       \item Section 2.2 now refers to ``nano'' and ``micro''
         benchmarks, with Footnote 1 justifying our choice of this
         terminology.  All of the text and graphs have been updated to
@@ -235,7 +235,7 @@ Reviewer 1: \vspace*{-.15in}
     network? \label{item:choice}
 
     \begin{itemize}
-      
+
       \item Section 1 contains a revised introduction that better
         justifies our focus on remote communication primitives in the
         Java programming language.  In essence, many of the custom
@@ -255,7 +255,7 @@ Reviewer 1: \vspace*{-.15in}
     difficult to understand.
 
     \begin{itemize}
-      
+
       \item In order to ensure that the paper fits into the ten page
         limit, we cut many paragraphs of content.  However, space
         constraints currently prevent us from substantially increasing
@@ -276,10 +276,10 @@ Reviewer 2: \vspace*{-.15in}
 
   \item {\bf Focus and Motivation of the Paper}: Can you better
     motivate why this result would help to solve a real-world problem
-    in the area of intra-node communication?  
+    in the area of intra-node communication?
 
     \begin{itemize}
-      
+
       \item We judge that this concern is connected to
         Item~\ref{item:choice} raised by Reviewer 1.  We modified
         several sections of the paper, including the abstract and
@@ -294,7 +294,7 @@ Reviewer 2: \vspace*{-.15in}
     word to stand for a ``data primitive.''
 
     \begin{itemize}
-      
+
       \item We have resolved this naming conflict by changing the
         title of the paper and now carefully using the term ``remote
         communication primitive'' through the article.  Instead of
@@ -310,7 +310,7 @@ Reviewer 2: \vspace*{-.15in}
     different data types?''
 
     \begin{itemize}
-      
+
       \item Our primary focus is to use the benchmarking framework to
         measure and explain response time results for two remote
         communication primitives.  In order to accomplish this task
@@ -326,7 +326,7 @@ Reviewer 2: \vspace*{-.15in}
     the evaluation metrics?
 
     \begin{itemize}
-      
+
       \item We revisited and ultimately hand-checked each of the
         calculations for every metric listed in Section 4.  The
         current version of the paper contains correct values for all
@@ -344,7 +344,7 @@ Reviewer 2: \vspace*{-.15in}
     support your assertions?
 
     \begin{itemize}
-      
+
       \item We now include a reference to a paper that describes the
         HotSpot adaptive optimization component. We do not include a
         specific reference for projects like XML-RPC due to space
@@ -362,7 +362,7 @@ Reviewer 2: \vspace*{-.15in}
     validity)?
 
     \begin{itemize}
-      
+
       \item We think that this concern is connected to
         Item~\ref{item:toomany} raised by Reviewer 1.  As such, we
         have removed the discussion of threats to validity from the
@@ -376,7 +376,7 @@ Reviewer 2: \vspace*{-.15in}
     the algorithm instead of $L$.
 
     \begin{itemize}
-      
+
       \item We have made all of the requested changes in sentence
         structure and notation.  For instance, the algorithm in Figure
         2 and all of the content in the paper now use $N$ to denote
@@ -385,19 +385,19 @@ Reviewer 2: \vspace*{-.15in}
         ``data value'' instead of ``data primitive.''  In summary, we
         have made all of these requested changes in Sections 1 through
         7.
-        
+
     \end{itemize}
 
   \item {\bf Table Movement}: Can you move the tables to the same page
     where they are discussed?
 
     \begin{itemize}
-      
+
       \item We moved Tables 1 and 2 to the third page of the paper.
         We tried to keep tables and figures close to the appropriate
         paragraphs whenever this layout would not ruin the overall
         organization and aesthetic appeal of the paper.
-        
+
     \end{itemize}
 
   \item {\bf Benchmark Name}: Can you change the name of a benchmark to
@@ -405,14 +405,14 @@ Reviewer 2: \vspace*{-.15in}
     clearly define the meaning of $B$ and $P$.
 
     \begin{itemize}
-      
+
       \item Instead of using the term ``FIND'' we now write ``GRAB''
         to reinforce the fact that the algorithm is $O(1)$.  We have
         made this change in both the text and the graphs.  The paper
         now explicitly states that $B$ can be any one of the
         benchmarks listed in Tables 1 and 2 and that $P$ can stand for
         either sockets ($S$) or XML-RPC ($X$).
-        
+
     \end{itemize}
 
   \item {\bf Statistical Assumptions}: Even though it only directly
@@ -420,11 +420,11 @@ Reviewer 2: \vspace*{-.15in}
     undergird the statistical analysis.
 
     \begin{itemize}
-      
+
       \item Instead of using the term ``assumption'' we now write
         ``observation.'' We re-wrote the paragraph in Section
         4.2 so that it refers to all three of the observations.
-        
+
     \end{itemize}
 
   \item {\bf String Processing}: The paper states that the XML-RPC
@@ -432,7 +432,7 @@ Reviewer 2: \vspace*{-.15in}
     explain why this is the case?
 
     \begin{itemize}
-      
+
       \item Section 5.3 now contains a full paragraph to explain more
         about how the implementation of the benchmarks impacts the
         performance results.  Briefly, both the socket and XML-RPC
@@ -441,7 +441,7 @@ Reviewer 2: \vspace*{-.15in}
         values.  We also cite reference [21] in support of the claim
         that additional string processing may cause the benchmarks to
         inefficiently allocate data values to the heap.
-        
+
     \end{itemize}
 
 \newpage
@@ -453,25 +453,25 @@ Reviewer 2: \vspace*{-.15in}
     a confusing fashion.
 
     \begin{itemize}
-      
+
       \item We re-wrote Section 6 so that it focuses on related work
         in the areas of communication primitives and sockets and
         XML-RPC.  The current version of the paper also avoids the
         confusing use of ``(i)'', ``(ii)'', etc.
-        
+
     \end{itemize}
 
   \item {\bf Explanatory Nature of Tables and Figures}: All of the
     tables and figures should be self-contained in nature.
 
     \begin{itemize}
-      
+
       \item We added one line comments to Tables 4, 5, and 7 in order
         to ensure that the reader can understand the content without
         having to read all of the surrounding content.  For instance,
         we now clarify that Table 4 only refers to response times
         calculated with the Java language-based timers.
-        
+
     \end{itemize}
 
   \item {\bf Differentiate the Timers}: A cursory glance at Table 5
@@ -479,37 +479,37 @@ Reviewer 2: \vspace*{-.15in}
     used.
 
     \begin{itemize}
-      
+
       \item The final column in Table 5 now contains a checkmark to
         indicate which type of instrumentation was used to collect the
         response time values.  Furthermore, we carefully checked that
         the text in Section 5 refers to each one of the rows in this
         table.
-        
+
     \end{itemize}
 
   \item {\bf Discuss the Subscripts}: The paper should explain the
     meaning of notation like $S_{500}$.
 
     \begin{itemize}
-      
+
       \item Footnote 3 in Section 5 now explains the meaning of the
         notation $P_k$, using $S_{500}$ as a concrete example that
         stands for the use of sockets to transmit a vector of size
         500.
-        
+
     \end{itemize}
 
   \item {\bf Table Headers}: All table headers should fully explain
     the data values in the column.
 
     \begin{itemize}
-      
+
       \item We carefully checked to ensure that all of the headers in
         the table accurately reflect the data values.  For instance,
         the header in Table 7 now indicates that the values correspond
         to a count of the number of packets.
-        
+
     \end{itemize}
 
 \end{enumerate}
@@ -534,6 +534,6 @@ soon learning more about the status of the article.
 \noindent
 Gregory M. Kapfhammer \\
 Department of Computer Science \\
-Allegheny  College 
+Allegheny  College
 
 \end{document}
