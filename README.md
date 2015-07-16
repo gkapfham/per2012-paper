@@ -21,6 +21,7 @@ Then, if you want to compile the paper to a PDF, you should type the following c
 
 ```shell
 cd per2012-paper
+cd paper
 pdflatex java_remote_primitives_compare.tex
 bibtex java_remote_primitives_compare.aux
 pdflatex java_remote_primitives_compare.tex
